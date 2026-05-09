@@ -1,0 +1,28 @@
+---
+const navItems = [
+  { href: "#section-1", label: "First painter" },
+  { href: "#section-2", label: "Second painter" },
+  { href: "#section-3", label: "Third painter" },
+  { href: "#section-4", label: "Fourth painter" },
+  { href: "#section-5", label: "Fifth painter" },
+];
+---
+
+<header class="site-header">
+  <span class="site-title">
+    <span class="accent">Latvian Painters:</span> Five Names That Matter
+  </span>
+  <nav class="site-nav" aria-label="Painters">
+    <ul class="dot-nav">
+      {
+        navItems.map((item) => (
+          <li>
+            <a href={item.href} aria-label={item.label}>
+              <span class="dot" aria-hidden="true"></span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
