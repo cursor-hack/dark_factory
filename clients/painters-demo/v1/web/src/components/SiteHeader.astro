@@ -6,11 +6,11 @@ import meta4 from "../content/painters/04-grosvalds/metadata.json";
 import meta5 from "../content/painters/05-padegs/metadata.json";
 
 const navItems = [
-  { href: "#section-1", label: meta1.name_lv },
-  { href: "#section-2", label: meta2.name_lv },
-  { href: "#section-3", label: meta3.name_lv },
-  { href: "#section-4", label: meta4.name_lv },
-  { href: "#section-5", label: meta5.name_lv },
+  { href: "#section-1", target: "section-1", label: meta1.name_lv },
+  { href: "#section-2", target: "section-2", label: meta2.name_lv },
+  { href: "#section-3", target: "section-3", label: meta3.name_lv },
+  { href: "#section-4", target: "section-4", label: meta4.name_lv },
+  { href: "#section-5", target: "section-5", label: meta5.name_lv },
 ];
 ---
 
@@ -23,7 +23,12 @@ const navItems = [
       {
         navItems.map((item) => (
           <li>
-            <a href={item.href} aria-label={item.label} title={item.label}>
+            <a
+              href={item.href}
+              data-target={item.target}
+              aria-label={item.label}
+              title={item.label}
+            >
               <span class="dot" aria-hidden="true"></span>
             </a>
           </li>
