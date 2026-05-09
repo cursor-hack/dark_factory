@@ -10,6 +10,8 @@ KAN-8 foundation implemented: markdown requirements can now be converted into a 
 
 ```text
 dark_factory/
+├── clients/
+│   └── <client>/<delivery>/web/   ← product UI; build → dist/ (see docs/product-deploy.md)
 ├── specs/
 │   └── product-requirements.md
 ├── schemas/
@@ -20,7 +22,7 @@ dark_factory/
 ├── output/
 │   └── generated-plan.json (created by CLI)
 └── tests/
-    └── plan-cli.test.mjs
+    └── *.test.mjs
 ```
 
 ## Getting started
@@ -32,6 +34,8 @@ npm install
 ```
 
 ## Flow
+
+**Jira → GitHub:** copy-paste URL, headers, and JSON bodies for every `repository_dispatch` type in [`docs/jira-repository-dispatch-examples.md`](docs/jira-repository-dispatch-examples.md) (raw JSON under [`examples/jira-dispatch/`](examples/jira-dispatch/)).
 
 ### 1 — Generate plan (Claude Code does this, triggered from Jira)
 
@@ -56,6 +60,10 @@ npx tsx scripts/dark-factory.ts apply output/generated-plan.json \
 ```
 
 Apply is idempotent: SHA-256 fingerprints prevent duplicate issues on reruns.
+
+### 3 — Deploy a product web app (Jira button)
+
+Put the site under `clients/<client>/<delivery>/web/` with `npm run build` producing `dist/`. A Jira rule sends `repository_dispatch` with `event_type` **`jira_deploy_product`**; GitHub Actions builds from **`main`** and publishes **`dist/`** to **GitHub Pages**. Full setup (payload, Pages settings): [`docs/product-deploy.md`](docs/product-deploy.md).
 
 Required env vars for Jira apply:
 

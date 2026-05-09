@@ -14,7 +14,8 @@ flow and Claude session continuity, see
 | [`jira-dispatch.yml`](../.github/workflows/jira-dispatch.yml) | `repository_dispatch: jira_manual_button` from Jira automation, or manual `workflow_dispatch` | Turn a Jira ticket into reviewable repo work or a Jira-facing answer. Resumes Claude across runs. |
 | [`jira-requirements-dispatch.yml`](../.github/workflows/jira-requirements-dispatch.yml) | `repository_dispatch: jira_requirements_button` from Jira automation, or manual `workflow_dispatch` | Run requirements to Jira plan/apply independently, sourcing requirements directly from the triggering Jira issue content. |
 | [`jira-pr-merged.yml`](../.github/workflows/jira-pr-merged.yml) | `pull_request: closed` on `tdf/<key>` branches | When a dispatch-flow PR is merged, transition the Jira ticket to Done and delete the head branch. |
-| [`poc-session.yml`](../.github/workflows/poc-session.yml) | Manual `workflow_dispatch` | Proof-of-concept that Claude Code sessions can be resumed across runner invocations. |
+| [`jira-product-deploy.yml`](../.github/workflows/jira-product-deploy.yml) | `repository_dispatch: jira_deploy_product` from Jira (or `workflow_dispatch`) | Build `clients/<client>/<delivery>/web` from `main`, publish `dist/` to **GitHub Pages**, comment back on the Jira issue. See [`product-deploy.md`](./product-deploy.md). |
+| [`deploy-on-merge.yml`](../.github/workflows/deploy-on-merge.yml) | `push` to `main` under `clients/**/backend/**` | Local Supabase + ngrok on a self-hosted runner (not the product web flow). |
 
 ## High level system view
 
@@ -37,7 +38,7 @@ flowchart LR
         direction TB
         WD["jira-dispatch.yml"]:::pref
         WM["jira-pr-merged.yml"]:::pref
-        WP["poc-session.yml<br/>(POC)"]:::poc
+        JP["jira-product-deploy.yml"]:::pref
     end
 
     subgraph OUT["Side effects"]
@@ -49,21 +50,19 @@ flowchart LR
 
     JM --> WD
     PRM --> WM
-    MD --> WP
     MD --> WD
+    MD --> JP
 
     WD --> CC
-    WP --> CC
 
     WD --> GH
     WM --> GH
-    WP --> GH
 
     WD --> JC
     WM --> JC
+    JP --> JC
 
     classDef pref fill:#d1f0d8,stroke:#28a745,color:#1f2328
-    classDef poc fill:#e7e9ec,stroke:#868e96,color:#1f2328
 ```
 
 ## Common shape of a Jira-driven run

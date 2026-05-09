@@ -1,0 +1,6 @@
+{
+  "event_type": "jira_epic_kickoff",
+  "client_payload": {
+    "epic_key": "{{issue.key}}"
+  }
+}

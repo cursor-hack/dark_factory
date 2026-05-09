@@ -1,0 +1,6 @@
+{
+  "event_type": "jira_manual_button",
+  "client_payload": {
+    "issue_key": "{{issue.key}}"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "example-demo-web",
+  "private": true,
+  "description": "Reference web root for Jira-triggered product deploy (replace with real delivery code).",
+  "scripts": {
+    "build": "node build.mjs"
+  }
+}
