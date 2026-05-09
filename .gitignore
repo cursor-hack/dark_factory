@@ -15,7 +15,11 @@ Icon
 *.swn
 *~
 .cursor/
-.claude/
+
+# Claude Code local state; shared agent skills are tracked (see CLAUDE.md)
+.claude/**
+!.claude/skills/
+!.claude/skills/**
 
 # --- Logs ---
 logs/
