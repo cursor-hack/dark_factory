@@ -191,106 +191,100 @@ If all six are yes, write the file.
 
 ## Requirements content (from output/requirements-from-jira.md)
 
-# Scrum landing page — developer specification 
+# Latvian painters gallery website
 
 ## Ticket Metadata
 
-- Jira key: KAN-124
+- Jira key: KAN-140
 - Status: To Do
 - Priority: Medium
 - Assignee: -
-- Reporter: Artjoms
+- Reporter: Pavel Koifman
 - Labels: -
 - Components: -
 
 ## Requirements
 
-## 1. Goal
+# Latvian Painters: Five Names That Matter
 
-Build a **single, static landing page** that gives a clear, accurate introduction to **Scrum** for people who are new to it (for example stakeholders or new team members). The page should be easy to scan in **two to five minutes** and encourage further learning. It does not replace formal training or the [Scrum Guide](https://scrumguides.org/).
+A scroll-driven gallery for a Cursor Hackathon demo.
 
-## 2. Audience and tone
+## What this is
 
-- **Primary:** Non-experts who need a correct mental model of Scrum.
-- **Tone:** Plain language, confident, neutral; avoid jargon without a one-line definition.
-- **Voice:** Third person or inclusive “teams”; avoid heavy marketing hype.
+A single-page static site showcasing five Latvian painters — Hūns, Grosvalds, Irbe, Padegs, Pēka — as a scroll-driven narrative spanning a century of Latvian art (1830s–1940s). Built once, viewed at the demo, then archived. Optimise for visual impact, not production hardening.
 
-## 3. Content requirements
+## Repo placement (do not deviate)
 
-### 3.1 Must include (accurate, high level)
+- Repo: `cursor-hack/dark_factory`.
+- All deliverables live at `clients/painters-demo/v1/web/`.
+- `clients/painters-demo/v1/web/package.json` MUST define `npm run build` that emits `clients/painters-demo/v1/web/dist/`.
+- `clients/painters-demo/v1/web/package-lock.json` MUST be committed (the deploy workflow uses `npm ci`).
+- Self-contained — do not modify the root `package.json` of the repo.
+- Stack: Astro 4 with TypeScript, static output. Astro's default `dist/` output target satisfies the contract.
 
-1. **What Scrum is** — Lightweight framework for developing, delivering, and sustaining complex products; empirical process control (transparency, inspection, adaptation). One short paragraph; optional link to the official Scrum Guide (external).
-2. **When it helps** — Complex work, need for feedback and learning; not a guarantee of success.
-3. **Roles (accountabilities)** — Product Owner, Scrum Master, Developers (one line each: main responsibility).
-4. **Events** — Sprint, Sprint Planning, Daily Scrum, Sprint Review, Sprint Retrospective (purpose of each in one sentence).
-5. **Artifacts** — Product Backlog, Sprint Backlog, Increment (plus Definition of Done as the quality commitment for the Increment). Short definitions only.
-6. **Sprint** — Time-boxed container; goal is a usable Increment that meets the Definition of Done.
-7. **Visual summary** — Simple diagram or structured list showing **Roles → Events → Artifacts** (implementer’s choice: structured HTML or graphic).
+## Content (already pre-committed by the operator)
 
-### 3.2 Nice to have
+Five painter folders live at `clients/painters-demo/v1/web/content/painters/<archive_id>/`:
 
-- Short **Myths** block (for example: Scrum is not a methodology with fixed scope agreed up front).
-- **FAQ** (three to five items): relationship to Agile, difference from Kanban at a glance, who decides what is built.
+- `karlis_huns_1831_3f3c/`
+- `jazeps_grosvalds_1891_72b1/`
+- `voldemars_irbe_1893_f992/`
+- `karlis_padegs_1911_0e0a/`
+- `lucia_peka_1912_60db/`
 
-### 3.3 Out of scope
+Each folder contains:
 
-- Full agile manifesto history, detailed scaling (LeSS, SAFe, etc.), tool-specific instructions (for example Jira), or certification prep.
+- `metadata.json` with fields `archive_id`, `name_lv`, `name_en`, `birth_year`, `death_year`, `article_url`, `profile_image_url`, `gallery_urls[]`.
+- `bio.txt` — Latvian prose, plain text.
 
-## 4. Functional requirements
+Import the JSON files directly via TypeScript imports at build time. No ingest pipeline, no schema validation, no normalisation. Trust the shape.
 
-ID
-Requirement
-F1  
-Single primary URL or route; no login; all content reachable without authentication. 
-F2  
-**Hero** section: headline and subheadline stating what the page is (Scrum overview). 
-F3  
-**Anchor navigation** or clear sections so users can jump to Roles, Events, Artifacts, Sprint. 
-F4  
-**Footer** with optional link to the Scrum Guide and “Last updated” or content version date. 
-F5  
-**Responsive:** Readable and navigable from **320px** width upward; adequate tap targets on mobile. 
-F6  
-**Print-friendly (optional):** Sections do not clip badly when printed or saved as PDF (basic CSS acceptable). 
+Image strategy: use the remote `enciklopedija.lv` URLs directly. Do not download or proxy.
 
-## 5. Non-functional requirements
+## What the page does
 
-ID
-Requirement
-N1  
-**Accessibility:** Semantic headings (`h1` → `h3`), meaningful link text, sufficient color contrast (target WCAG 2.1 AA). 
-N2  
-**Performance:** Minimal dependencies; avoid blocking heavy assets above the fold; target **LCP under 2.5s** on typical broadband for a simple static page. 
-N3  
-**SEO basics:** `<title>` and meta description; one clear `h1`. 
-N4  
-**Accuracy:** Terminology aligns with the current **Scrum Guide** (Product Owner, Scrum Master, Developers, events, commitments). Content should be easy to update in one place when the guide changes. 
+A single full-bleed scroll-driven page at `clients/painters-demo/v1/web/src/pages/index.astro` with five painter sections stacked vertically. Each section:
 
-## 6. UX and UI guidance
+- Full-viewport hero with the painter's `profile_image_url` as the section background, with a subtle ken-burns slow zoom triggered when the section enters the viewport.
+- Name in large display serif (Latvian, `name_lv`); lifespan beneath in smaller muted type; English transliteration shown on hover.
+- Bio rendered as readable prose (max-width 60ch, generous line-height, museum-quality serif body type).
+- A horizontal scrolling strip of gallery images (3–6 per painter) under the bio. Click any image opens a full-screen lightbox with ←/→/Esc keyboard navigation.
+- A "Read on Encyclopaedia Latvija →" link to the painter's `article_url`.
+- Smooth fade/slide-in animations on enter using Intersection Observer + CSS transitions. Do not pull in heavy animation libraries.
 
-- **Layout:** Vertical flow; card or column layout acceptable for Roles / Events / Artifacts.
-- **Hierarchy:** Limit to roughly three heading levels on this page.
-- **Visual identity:** Neutral professional palette; one accent color is acceptable. No requirement for illustration unless the team adds simple icons.
-- **Language:** Prefer official wording (“accountabilities” vs informal “roles”) where it matches the Scrum Guide; a separate glossary is not required if terms are defined inline.
+Top of the page: a thin sticky header with the site title ("Latvian Painters: Five Names That Matter") and a 5-dot in-page navigation showing scroll position.
 
-## 7. Technical constraints
+Bottom of the page: an attribution footer crediting `enciklopedija.lv` and the museums named in the bios. Single line, small, muted.
 
-- **Stack:** Team choice (static HTML/CSS or any simple framework). Prefer **static output** where possible (easy hosting: GitHub Pages, Netlify, and similar).
-- **Dependencies:** Keep to a minimum; document build steps in README if not zero-build.
-- **Assets:** Optimized images if any; SVG preferred for simple diagrams.
+## Visual direction
 
-## 8. Acceptance criteria (definition of done for delivery)
+- Dark background (near-black, e.g. `#0c0c0e`).
+- Off-white serif typography for body, sans-serif for chrome.
+- Generous whitespace; museum-gallery feel, not blog feel.
+- Images dominate; text restrained.
+- One accent colour (warm gold, `#c8a96a`) for links and the active section indicator.
 
-1. All **Must include** items in §3.1 are present with **no statements that contradict** the Scrum Guide at time of publication.
-2. Navigation works on desktop and mobile; no layout-driven horizontal scroll on standard viewports.
-3. Page passes automated **axe** or Lighthouse accessibility checks with **no critical** issues, or documented exceptions.
-4. Content is maintainable (for example one config, markdown file, or component per major section).
+## What we are NOT doing
 
-## 9. Open decisions
+- No multi-page routing, no per-painter routes.
+- No JSON Schema, no Zod, no ingest CLI, no validation.
+- No SEO meta per painter (one site-level `<title>` + `<meta description>` is fine).
+- No CMS, no analytics, no auth, no comments.
+- No A11y deep-dive beyond basic alt text on images and keyboard nav inside the lightbox.
+- No language switcher (Latvian-first; English names appear on hover only).
+- No deploy automation in the chain — see "Out of scope" below.
 
-- Scrum Guide language variant (English default).
-- Diagram as inline SVG versus exported raster image.
-- Branding (logo, colors) versus default neutral styling.
+## Hosting
+
+GitHub Pages (Source: GitHub Actions, already configured at the repo level).
+
+Deploy is **out of scope for the chain**. After the Epic transitions to In Review (i.e. all chain PRs merged to `main`), the operator clicks a separate Jira automation button — "Deploy product to GitHub Pages" — on the Epic. That fires `repository_dispatch: jira_deploy_product` with `client=painters-demo` and `delivery=v1`, which runs `.github/workflows/jira-product-deploy.yml`. The workflow checks out `main`, runs `npm ci` and `npm run build` in `clients/painters-demo/v1/web/`, and publishes the resulting `dist/` to GitHub Pages.
+
+Live URL after deploy: `https://cursor-hack.github.io/dark_factory/`.
+
+## Plan budget
+
+The generated plan MUST contain at most 3 development tasks total. Subtasks count toward this cap. The planner is expected to add one E2E task on top of those 3 (per the existing planner E2E mandate) — the chain will therefore run 4 hops.
 
 ## Comments
 
