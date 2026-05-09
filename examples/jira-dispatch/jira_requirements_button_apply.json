@@ -1,0 +1,8 @@
+{
+  "event_type": "jira_requirements_button",
+  "client_payload": {
+    "issue_key": "{{issue.key}}",
+    "project_key": "{{issue.project.key}}",
+    "apply_approve": true
+  }
+}

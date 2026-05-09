@@ -13,7 +13,9 @@ const isMain = import.meta.url === `file://${process.argv[1]}`;
 if (isMain) {
   const mode = process.argv[2];
   if (!mode) {
-    console.error("Usage: jira-dispatch.mjs <prepare-dispatch|record-run|commit-changes|ensure-pr|comment-result|transition-done>");
+    console.error(
+      "Usage: jira-dispatch.mjs <prepare-dispatch|record-run|commit-changes|ensure-pr|comment-result|comment-product-deploy|transition-done>",
+    );
     process.exit(1);
   }
   run(mode).catch((err) => {
@@ -28,6 +30,7 @@ async function run(mode) {
   if (mode === "commit-changes") return commitChanges();
   if (mode === "ensure-pr") return ensurePr();
   if (mode === "comment-result") return commentResult();
+  if (mode === "comment-product-deploy") return commentProductDeploy();
   if (mode === "transition-done") return transitionDone();
   throw new Error(`Unknown mode: ${mode}`);
 }
@@ -643,6 +646,29 @@ async function commentResult() {
     }
     await transitionToInReview(issueKey, issue);
   }
+}
+
+async function commentProductDeploy() {
+  initJira();
+  const issueKey = requireEnv("ISSUE_KEY");
+  const commentFile = requireEnv("PRODUCT_DEPLOY_COMMENT_FILE");
+  if (!(await pathExists(commentFile))) {
+    throw new Error(`Missing comment file: ${commentFile}`);
+  }
+  const text = (await readFile(commentFile, "utf8")).trim();
+  const client = env.PRODUCT_CLIENT || "";
+  const delivery = env.PRODUCT_DELIVERY || "";
+  const header = `[TDF-bot] Product deploy${client && delivery ? ` (${client}/${delivery})` : ""} for ${issueKey}`;
+  const content = [paragraph(header)];
+  if (text) content.push(...markdownToAdfBlocks(text));
+  else content.push(paragraph("_No deploy summary body._"));
+
+  await fetchJson(`${jiraBaseUrl}/rest/api/3/issue/${encodeURIComponent(issueKey)}/comment`, {
+    method: "POST",
+    headers: jiraHeaders,
+    body: JSON.stringify({ body: { type: "doc", version: 1, content } }),
+  });
+  console.log(`Posted product deploy comment to ${issueKey}`);
 }
 
 function paragraph(text) {
