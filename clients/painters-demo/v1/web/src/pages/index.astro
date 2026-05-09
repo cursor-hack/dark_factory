@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const sections = [
+  { id: "section-1", eyebrow: "I", title: "First painter" },
+  { id: "section-2", eyebrow: "II", title: "Second painter" },
+  { id: "section-3", eyebrow: "III", title: "Third painter" },
+  { id: "section-4", eyebrow: "IV", title: "Fourth painter" },
+  { id: "section-5", eyebrow: "V", title: "Fifth painter" },
+];
+---
+
+<BaseLayout>
+  {
+    sections.map((section) => (
+      <section id={section.id} class="painter-section">
+        <p class="eyebrow">{section.eyebrow}</p>
+        <h2>{section.title}</h2>
+      </section>
+    ))
+  }
+</BaseLayout>
