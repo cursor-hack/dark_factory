@@ -1,22 +1,110 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const sections = [
-  { id: "section-1", eyebrow: "I", title: "First painter" },
-  { id: "section-2", eyebrow: "II", title: "Second painter" },
-  { id: "section-3", eyebrow: "III", title: "Third painter" },
-  { id: "section-4", eyebrow: "IV", title: "Fourth painter" },
-  { id: "section-5", eyebrow: "V", title: "Fifth painter" },
+import meta1 from "../content/painters/01-rozentals/metadata.json";
+import meta2 from "../content/painters/02-purvitis/metadata.json";
+import meta3 from "../content/painters/03-valters/metadata.json";
+import meta4 from "../content/painters/04-grosvalds/metadata.json";
+import meta5 from "../content/painters/05-padegs/metadata.json";
+
+import bio1 from "../content/painters/01-rozentals/bio.txt?raw";
+import bio2 from "../content/painters/02-purvitis/bio.txt?raw";
+import bio3 from "../content/painters/03-valters/bio.txt?raw";
+import bio4 from "../content/painters/04-grosvalds/bio.txt?raw";
+import bio5 from "../content/painters/05-padegs/bio.txt?raw";
+
+interface PainterMeta {
+  slug: string;
+  name_lv: string;
+  name_en: string;
+  birth_year: number;
+  death_year: number;
+  profile_image_url: string;
+  article_url: string;
+  gallery: { url: string; alt: string }[];
+}
+
+const painters: { meta: PainterMeta; bio: string; eyebrow: string; sectionId: string }[] = [
+  { meta: meta1 as PainterMeta, bio: bio1.trim(), eyebrow: "I",   sectionId: "section-1" },
+  { meta: meta2 as PainterMeta, bio: bio2.trim(), eyebrow: "II",  sectionId: "section-2" },
+  { meta: meta3 as PainterMeta, bio: bio3.trim(), eyebrow: "III", sectionId: "section-3" },
+  { meta: meta4 as PainterMeta, bio: bio4.trim(), eyebrow: "IV",  sectionId: "section-4" },
+  { meta: meta5 as PainterMeta, bio: bio5.trim(), eyebrow: "V",   sectionId: "section-5" },
 ];
 ---
 
 <BaseLayout>
   {
-    sections.map((section) => (
-      <section id={section.id} class="painter-section">
-        <p class="eyebrow">{section.eyebrow}</p>
-        <h2>{section.title}</h2>
+    painters.map(({ meta, bio, eyebrow, sectionId }) => (
+      <section
+        id={sectionId}
+        class="painter-section reveal"
+        aria-labelledby={`${sectionId}-title`}
+      >
+        <div
+          class="painter-hero reveal"
+          style={`background-image: url('${meta.profile_image_url}');`}
+          role="img"
+          aria-label={`Portrait of ${meta.name_lv}`}
+        >
+          <div class="painter-hero-overlay" aria-hidden="true"></div>
+          <div class="painter-hero-inner">
+            <p class="eyebrow">{eyebrow}</p>
+            <h2 id={`${sectionId}-title`} class="painter-name">
+              <span class="name-lv">{meta.name_lv}</span>
+              <span class="name-en" aria-hidden="true">{meta.name_en}</span>
+            </h2>
+            <p class="painter-years">
+              {meta.birth_year}<span class="dash">–</span>{meta.death_year}
+            </p>
+          </div>
+        </div>
+
+        <div class="painter-body reveal">
+          <p class="painter-bio">{bio}</p>
+
+          <div class="gallery-strip" role="list" aria-label={`Selected works by ${meta.name_lv}`}>
+            {meta.gallery.map((item) => (
+              <figure class="gallery-item" role="listitem">
+                <img src={item.url} alt={item.alt} loading="lazy" decoding="async" />
+              </figure>
+            ))}
+          </div>
+
+          <p class="painter-link-row">
+            <a
+              class="painter-link"
+              href={meta.article_url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Read on Encyclopaedia Latvija <span aria-hidden="true">→</span>
+            </a>
+          </p>
+        </div>
       </section>
     ))
   }
 </BaseLayout>
+
+<script>
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reveals = document.querySelectorAll<HTMLElement>(".reveal");
+
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    reveals.forEach((el) => el.classList.add("is-visible"));
+  } else {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            io.unobserve(entry.target);
+          }
+        }
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.15 },
+    );
+    reveals.forEach((el) => io.observe(el));
+  }
+</script>

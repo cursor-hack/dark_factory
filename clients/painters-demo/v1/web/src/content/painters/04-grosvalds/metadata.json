@@ -1,0 +1,15 @@
+{
+  "slug": "grosvalds",
+  "name_lv": "Jāzeps Grosvalds",
+  "name_en": "Jazeps Grosvalds",
+  "birth_year": 1891,
+  "death_year": 1920,
+  "profile_image_url": "https://picsum.photos/seed/grosvalds-hero/1920/1080",
+  "article_url": "https://enciklopedija.lv/skirklis/J%C4%81zeps_Grosvalds",
+  "gallery": [
+    { "url": "https://picsum.photos/seed/grosvalds-1/900/675", "alt": "Jāzeps Grosvalds — Latvian riflemen at the front." },
+    { "url": "https://picsum.photos/seed/grosvalds-2/900/675", "alt": "Jāzeps Grosvalds — refugees on the road, gouache." },
+    { "url": "https://picsum.photos/seed/grosvalds-3/900/675", "alt": "Jāzeps Grosvalds — Mesopotamian landscape from the Middle East period." },
+    { "url": "https://picsum.photos/seed/grosvalds-4/900/675", "alt": "Jāzeps Grosvalds — figure study in cubist-tinged line." }
+  ]
+}

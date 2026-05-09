@@ -1,0 +1,15 @@
+{
+  "slug": "padegs",
+  "name_lv": "Kārlis Padegs",
+  "name_en": "Karlis Padegs",
+  "birth_year": 1911,
+  "death_year": 1940,
+  "profile_image_url": "https://picsum.photos/seed/padegs-hero/1920/1080",
+  "article_url": "https://enciklopedija.lv/skirklis/K%C4%81rlis_Padegs",
+  "gallery": [
+    { "url": "https://picsum.photos/seed/padegs-1/900/675", "alt": "Kārlis Padegs — jazz musician in nervous ink." },
+    { "url": "https://picsum.photos/seed/padegs-2/900/675", "alt": "Kārlis Padegs — Madonna with the machine gun, gouache." },
+    { "url": "https://picsum.photos/seed/padegs-3/900/675", "alt": "Kārlis Padegs — Riga café dandy, watercolour." },
+    { "url": "https://picsum.photos/seed/padegs-4/900/675", "alt": "Kārlis Padegs — soldier and prostitute under streetlight." }
+  ]
+}

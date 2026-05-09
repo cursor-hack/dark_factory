@@ -7,6 +7,8 @@
   --serif: "Cormorant Garamond", "EB Garamond", Georgia, "Times New Roman", serif;
   --sans: "Inter", "Helvetica Neue", Arial, system-ui, sans-serif;
   --header-h: 56px;
+  --content-max: 60ch;
+  --reveal-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 *,
@@ -56,6 +58,8 @@ h4 {
 p {
   margin: 0 0 1em;
 }
+
+/* ---------- Header & footer chrome ---------- */
 
 .site-header {
   position: sticky;
@@ -117,31 +121,7 @@ p {
 }
 
 main {
-  max-width: 64rem;
-  margin: 0 auto;
-  padding: 3rem 1.5rem 4rem;
-}
-
-.painter-section {
-  padding: 3rem 0;
-  border-bottom: 1px solid var(--rule);
-}
-
-.painter-section:last-of-type {
-  border-bottom: 0;
-}
-
-.painter-section h2 {
-  font-size: 2rem;
-}
-
-.eyebrow {
-  font-family: var(--sans);
-  font-size: 0.75rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 0.5rem;
+  display: block;
 }
 
 .site-footer {
@@ -160,4 +140,244 @@ main {
 .site-footer a:hover,
 .site-footer a:focus-visible {
   color: var(--accent);
+}
+
+/* ---------- Painter section ---------- */
+
+.painter-section {
+  position: relative;
+  border-bottom: 1px solid var(--rule);
+}
+
+.painter-section:last-of-type {
+  border-bottom: 0;
+}
+
+/* Hero: full-viewport background image with overlay + ken-burns when visible */
+
+.painter-hero {
+  position: relative;
+  min-height: calc(100vh - var(--header-h));
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  /* baseline transform — ken-burns starts when .is-visible is added */
+  transform: scale(1);
+  transform-origin: center center;
+  transition: transform 18s linear;
+  will-change: transform;
+}
+
+.painter-hero.is-visible {
+  animation: ken-burns 22s ease-out forwards;
+}
+
+@keyframes ken-burns {
+  from {
+    transform: scale(1);
+    transform-origin: 50% 55%;
+  }
+  to {
+    transform: scale(1.12);
+    transform-origin: 50% 50%;
+  }
+}
+
+.painter-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(12, 12, 14, 0.55) 0%,
+    rgba(12, 12, 14, 0.25) 35%,
+    rgba(12, 12, 14, 0.85) 100%
+  );
+  pointer-events: none;
+}
+
+.painter-hero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 3rem;
+}
+
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.painter-name {
+  position: relative;
+  display: inline-block;
+  font-size: clamp(2.5rem, 6.5vw, 5.25rem);
+  line-height: 1.05;
+  margin: 0 0 0.35em;
+  color: var(--fg);
+  cursor: default;
+}
+
+.painter-name .name-lv {
+  display: inline-block;
+  transition: opacity 320ms var(--reveal-ease);
+}
+
+.painter-name .name-en {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  font-size: inherit;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateY(0.15em);
+  transition: opacity 320ms var(--reveal-ease), transform 320ms var(--reveal-ease);
+  pointer-events: none;
+  letter-spacing: 0.005em;
+}
+
+.painter-name:hover .name-lv,
+.painter-name:focus-visible .name-lv {
+  opacity: 0;
+}
+
+.painter-name:hover .name-en,
+.painter-name:focus-visible .name-en {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.painter-years {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  color: var(--fg-muted);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.painter-years .dash {
+  margin: 0 0.25em;
+}
+
+/* Body: bio prose, gallery strip, article link */
+
+.painter-body {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 5rem;
+}
+
+.painter-bio {
+  max-width: var(--content-max);
+  margin: 0 0 2.5rem;
+  font-size: 1.1875rem;
+  line-height: 1.75;
+  color: var(--fg);
+}
+
+.gallery-strip {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
+  margin: 0 -1.5rem 2rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+
+.gallery-strip::-webkit-scrollbar {
+  height: 6px;
+}
+
+.gallery-strip::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+.gallery-item {
+  flex: 0 0 auto;
+  width: clamp(220px, 28vw, 360px);
+  margin: 0;
+  scroll-snap-align: start;
+  border: 1px solid var(--rule);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.gallery-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.painter-link-row {
+  margin: 0;
+}
+
+.painter-link {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  border-bottom: 1px solid transparent;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.painter-link:hover,
+.painter-link:focus-visible {
+  border-bottom-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ---------- Reveal animation ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 700ms var(--reveal-ease), transform 700ms var(--reveal-ease);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* The hero needs its own animation as well as reveal — keep both compatible. */
+.painter-hero.reveal {
+  transform: translateY(24px) scale(1);
+}
+
+.painter-hero.reveal.is-visible {
+  /* the ken-burns @keyframes drives transform from here */
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .painter-hero,
+  .painter-hero.is-visible {
+    animation: none;
+    transform: none;
+  }
 }

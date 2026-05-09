@@ -1,0 +1,11 @@
+{
+  "ticket_id": "KAN-143",
+  "run_count": 1,
+  "kind": "pr",
+  "branch": "tdf/kan-143",
+  "last_session_id": "dd20e586-6159-4ca7-b300-ffc7b9f380b5",
+  "prev_session_id": null,
+  "last_run_at": "2026-05-09T21:52:02.495Z",
+  "last_conclusion": "success",
+  "last_kind": "pr"
+}
