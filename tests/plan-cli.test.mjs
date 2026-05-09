@@ -52,6 +52,28 @@ test("apply command without approve does not require jira credentials", async ()
   assert.match(result.stdout, /Dry run complete/);
 });
 
+test("plan command enforces inline max development task budget", async () => {
+  const source = "tests/fixtures/requirements-max-3.md";
+  const out = "output/test/generated-max-3.json";
+
+  runCli(["plan", source, "--out", out]);
+
+  const raw = await readFile(path.join(workspaceRoot, out), "utf8");
+  const plan = JSON.parse(raw);
+
+  const taskCount = plan.epics.reduce((sum, epic) => sum + epic.tasks.length, 0);
+  const subtaskCount = plan.epics.reduce(
+    (sum, epic) => sum + epic.tasks.reduce((inner, task) => inner + task.subtasks.length, 0),
+    0,
+  );
+
+  assert.ok(taskCount + subtaskCount <= 3);
+  assert.match(plan.summary, /Enforced development task cap: 3/);
+  assert.ok(
+    plan.open_questions.some((item) => item.includes("Deferred") && item.includes("development task cap (3)")),
+  );
+});
+
 test.after(async () => {
   await rm(tempDir, { recursive: true, force: true });
 });

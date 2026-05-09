@@ -37,6 +37,7 @@ Generate a structured plan from markdown requirements:
 
 ```bash
 npx tsx scripts/dark-factory.ts plan specs/product-requirements.md --out output/generated-plan.json
+npx tsx scripts/dark-factory.ts plan specs/product-requirements.md --out output/generated-plan.json --max-development-tasks 3
 ```
 
 Equivalent helper entrypoint:
@@ -53,6 +54,7 @@ npx tsx scripts/dark-factory.ts apply output/generated-plan.json --project KAN -
 ```
 
 Plan/apply behavior includes one generated `E2E: <Epic title>` task per epic, with idempotent reuse on reruns.
+When a development-task cap is provided (CLI flag or inline requirement text), the planner enforces it across tasks + subtasks and defers excess scope into `open_questions`.
 
 Required env vars for Jira apply:
 

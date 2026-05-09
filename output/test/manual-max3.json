@@ -1,0 +1,68 @@
+{
+  "source_file": "tests/fixtures/requirements-max-3.md",
+  "summary": "Generated from Plan generator smoke (max 3 development tasks). Enforced development task cap: 3.",
+  "open_questions": [
+    "Should we document transformation order in --help output?",
+    "Deferred task due to development task cap (3): Input handling > Treat empty input as a no-op exit code 0.",
+    "Deferred task due to development task cap (3): Input handling > E2E: Input handling",
+    "Deferred task due to development task cap (3): Transformations > --upper flag uppercases the entire input.",
+    "Deferred task due to development task cap (3): Transformations > --reverse flag reverses the entire input string.",
+    "Deferred task due to development task cap (3): Transformations > Flags can be combined (--upper --reverse applies both, order: upper then reverse).",
+    "Deferred task due to development task cap (3): Transformations > E2E: Transformations",
+    "Deferred task due to development task cap (3): Output and error reporting > Write transformed text to stdout without adding trailing newline.",
+    "Deferred task due to development task cap (3): Output and error reporting > Unknown flags produce a one-line error to stderr and exit code 2.",
+    "Deferred task due to development task cap (3): Output and error reporting > E2E: Output and error reporting",
+    "Deferred task due to development task cap (3): Operator can pipe text through df-echo > Exit code 0 on successful transform.",
+    "Deferred task due to development task cap (3): Operator can pipe text through df-echo > Stdout matches expected transformed string byte-for-byte.",
+    "Deferred task due to development task cap (3): Operator can pipe text through df-echo > E2E: Operator can pipe text through df-echo",
+    "Deferred epic implementation due to development task cap (3): Transformations",
+    "Deferred epic implementation due to development task cap (3): Output and error reporting",
+    "Deferred epic implementation due to development task cap (3): Operator can pipe text through df-echo"
+  ],
+  "epics": [
+    {
+      "title": "Input handling",
+      "description": "Delivery for product area: Input handling",
+      "source_sections": [
+        "Input handling"
+      ],
+      "tasks": [
+        {
+          "title": "Read all of stdin until EOF.",
+          "description": "Implement requirement: Read all of stdin until EOF.",
+          "acceptance_criteria": [
+            "Requirement implemented: Read all of stdin until EOF."
+          ],
+          "dependencies": [],
+          "priority": "medium",
+          "complexity": "small",
+          "source_sections": [
+            "Input handling"
+          ],
+          "subtasks": [
+            {
+              "title": "Implement Read all of stdin until EOF.",
+              "description": "Deliver code and configuration for: Read all of stdin until EOF.",
+              "acceptance_criteria": [
+                "Implementation complete for Read all of stdin until EOF."
+              ],
+              "source_sections": [
+                "Input handling"
+              ]
+            },
+            {
+              "title": "Validate Read all of stdin until EOF.",
+              "description": "Validate behavior and quality for: Read all of stdin until EOF.",
+              "acceptance_criteria": [
+                "Verification checks pass."
+              ],
+              "source_sections": [
+                "Input handling"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

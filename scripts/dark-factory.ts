@@ -40,6 +40,9 @@ type JiraPlan = {
   open_questions: string[];
   epics: PlanEpic[];
 };
+type BuildPlanOptions = {
+  maxDevelopmentTasks?: number;
+};
 
 type Section = {
   heading: string;
@@ -93,7 +96,7 @@ function printHelp() {
       "dark-factory CLI",
       "",
       "Commands:",
-      "  dark-factory plan [source.md] [--out output/generated-plan.json]",
+      "  dark-factory plan [source.md] [--out output/generated-plan.json] [--max-development-tasks 3]",
       "  dark-factory apply [output/generated-plan.json] --project KAN [--approve] [--out output/applied-issues.json]",
       "",
       "Environment for apply:",
@@ -132,9 +135,12 @@ function firstPositional(args: string[]): string | undefined {
 async function runPlanCommand(args: string[]) {
   const source = firstPositional(args) ?? DEFAULT_SOURCE;
   const outputPath = readArgValue(args, "--out") ?? DEFAULT_PLAN_OUTPUT;
+  const explicitMaxDevTasks = parseOptionalPositiveInteger(readArgValue(args, "--max-development-tasks"), "--max-development-tasks");
   const schema = await readJson(SCHEMA_PATH);
   const markdown = await readText(source);
-  const plan = buildPlanFromMarkdown(markdown, source);
+  const inlineMaxDevTasks = extractInlineDevelopmentTaskCap(markdown);
+  const maxDevelopmentTasks = explicitMaxDevTasks ?? inlineMaxDevTasks;
+  const plan = buildPlanFromMarkdown(markdown, source, { maxDevelopmentTasks });
   validatePlan(plan, schema);
 
   await mkdir(path.dirname(outputPath), { recursive: true });
@@ -258,18 +264,22 @@ function summarizePlan(plan: JiraPlan): string {
   ].join("\n");
 }
 
-function buildPlanFromMarkdown(markdown: string, sourceFile: string): JiraPlan {
+function buildPlanFromMarkdown(markdown: string, sourceFile: string, options: BuildPlanOptions = {}): JiraPlan {
   const sections = parseSections(markdown);
   const title = firstHeading(markdown) ?? "Product requirements";
   const areaSections = sections.filter((s) => s.level === 3);
   const openQuestions = extractOpenQuestions(sections);
   const epics = buildEpics(areaSections, sections);
+  const enforcement = enforceDevelopmentTaskBudget(epics, options.maxDevelopmentTasks);
+  const summary = enforcement.maxDevelopmentTasks
+    ? `Generated from ${title}. Enforced development task cap: ${enforcement.maxDevelopmentTasks}.`
+    : `Generated from ${title}.`;
 
   return {
     source_file: sourceFile,
-    summary: `Generated from ${title}.`,
-    open_questions: openQuestions,
-    epics,
+    summary,
+    open_questions: [...openQuestions, ...enforcement.deferredOpenQuestions],
+    epics: enforcement.epics,
   };
 }
 
@@ -444,6 +454,101 @@ function ensureE2ETask(epicTitle: string, tasks: PlanTask[]): PlanTask[] {
   const alreadyExists = tasks.some((task) => task.title.trim().toLowerCase() === expectedTitle);
   if (alreadyExists) return tasks;
   return [...tasks, buildE2ETask(epicTitle, [epicTitle])];
+}
+
+function extractInlineDevelopmentTaskCap(markdown: string): number | undefined {
+  const regexes = [
+    /\b(?:at\s+most|maximum|max)\s+(\d+)\s+development\s+tasks?\b/i,
+    /\bdevelopment\s+tasks?\s*(?:cap|budget)\s*[:=]\s*(\d+)\b/i,
+    /\bmax(?:imum)?\s*[- ]?(\d+)\s+development\s+tasks?\b/i,
+  ];
+
+  for (const regex of regexes) {
+    const match = markdown.match(regex);
+    if (!match) continue;
+    const parsed = Number.parseInt(match[1], 10);
+    if (Number.isInteger(parsed) && parsed > 0) return parsed;
+  }
+
+  return undefined;
+}
+
+function parseOptionalPositiveInteger(value: string | undefined, flagName: string): number | undefined {
+  if (value === undefined) return undefined;
+  const parsed = Number.parseInt(value, 10);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    throw new Error(`Invalid ${flagName} value: "${value}". Expected a positive integer.`);
+  }
+  return parsed;
+}
+
+function enforceDevelopmentTaskBudget(
+  epics: PlanEpic[],
+  maxDevelopmentTasks: number | undefined,
+): {
+  epics: PlanEpic[];
+  deferredOpenQuestions: string[];
+  maxDevelopmentTasks?: number;
+} {
+  if (!maxDevelopmentTasks) {
+    return { epics, deferredOpenQuestions: [] };
+  }
+
+  let remaining = maxDevelopmentTasks;
+  const deferredOpenQuestions: string[] = [];
+
+  const cappedEpics = epics.map((epic) => {
+    const keptTasks: PlanTask[] = [];
+
+    for (const task of epic.tasks) {
+      if (remaining <= 0) {
+        deferredOpenQuestions.push(
+          `Deferred task due to development task cap (${maxDevelopmentTasks}): ${epic.title} > ${task.title}`,
+        );
+        continue;
+      }
+
+      remaining -= 1;
+      const keptSubtasks: PlanSubtask[] = [];
+
+      for (const subtask of task.subtasks) {
+        if (remaining <= 0) {
+          deferredOpenQuestions.push(
+            `Deferred subtask due to development task cap (${maxDevelopmentTasks}): ${epic.title} > ${task.title} > ${subtask.title}`,
+          );
+          continue;
+        }
+        keptSubtasks.push(subtask);
+        remaining -= 1;
+      }
+
+      keptTasks.push({ ...task, subtasks: keptSubtasks });
+    }
+
+    return { ...epic, tasks: keptTasks };
+  });
+
+  const nonEmptyEpics = cappedEpics.filter((epic) => epic.tasks.length > 0);
+  for (const epic of cappedEpics) {
+    if (epic.tasks.length === 0) {
+      deferredOpenQuestions.push(
+        `Deferred epic implementation due to development task cap (${maxDevelopmentTasks}): ${epic.title}`,
+      );
+    }
+  }
+
+  const resultingEpics =
+    nonEmptyEpics.length > 0
+      ? nonEmptyEpics
+      : [
+          {
+            title: "Deferred Scope",
+            description: "Implementation scope deferred due to development task cap.",
+            source_sections: ["Document"],
+            tasks: [defaultTask("Document")],
+          },
+        ];
+  return { epics: resultingEpics, deferredOpenQuestions, maxDevelopmentTasks };
 }
 
 function inferComplexity(text: string): Complexity {
