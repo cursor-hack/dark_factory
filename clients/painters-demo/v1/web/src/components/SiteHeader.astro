@@ -1,10 +1,16 @@
 ---
+import meta1 from "../content/painters/01-rozentals/metadata.json";
+import meta2 from "../content/painters/02-purvitis/metadata.json";
+import meta3 from "../content/painters/03-valters/metadata.json";
+import meta4 from "../content/painters/04-grosvalds/metadata.json";
+import meta5 from "../content/painters/05-padegs/metadata.json";
+
 const navItems = [
-  { href: "#section-1", label: "First painter" },
-  { href: "#section-2", label: "Second painter" },
-  { href: "#section-3", label: "Third painter" },
-  { href: "#section-4", label: "Fourth painter" },
-  { href: "#section-5", label: "Fifth painter" },
+  { href: "#section-1", label: meta1.name_lv },
+  { href: "#section-2", label: meta2.name_lv },
+  { href: "#section-3", label: meta3.name_lv },
+  { href: "#section-4", label: meta4.name_lv },
+  { href: "#section-5", label: meta5.name_lv },
 ];
 ---
 
@@ -17,7 +23,7 @@ const navItems = [
       {
         navItems.map((item) => (
           <li>
-            <a href={item.href} aria-label={item.label}>
+            <a href={item.href} aria-label={item.label} title={item.label}>
               <span class="dot" aria-hidden="true"></span>
             </a>
           </li>
