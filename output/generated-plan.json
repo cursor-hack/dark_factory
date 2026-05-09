@@ -1,69 +1,75 @@
 {
   "source_file": "output/requirements-from-jira.md",
-  "summary": "Build a scroll-driven single-page Astro 4 gallery site at clients/painters-demo/v1/web/ showcasing five Latvian painters with full-bleed hero sections, bio prose, horizontal gallery strips, a lightbox, and a sticky dot-nav — all in a dark museum aesthetic. Content is pre-committed; the chain delivers the project scaffold, page implementation, and interactive features in 3 PRs plus one E2E verification PR.",
+  "summary": "Build a scroll-driven single-page Astro 4 gallery at clients/painters-demo/v1/web/ showcasing five Latvian painters. The chain opens with a mandatory pre-flight that halts on missing bundle files, then scaffolds the project, renders all painter sections, adds interactive lightbox and dot-nav, and closes with an E2E verification run — 3 development PRs plus 1 E2E PR.",
   "open_questions": [],
   "epics": [
     {
       "title": "Latvian Painters Gallery",
-      "description": "A scroll-driven single-page static Astro 4 site showcasing five Latvian painters for the Cursor Hackathon demo, living at clients/painters-demo/v1/web/. The operator has pre-committed all content; the chain scaffolds the project, renders the gallery, and wires up interactivity.",
+      "description": "A single-page static Astro 4 site at clients/painters-demo/v1/web/ showcasing five Latvian painters (Hūns, Grosvalds, Irbe, Padegs, Pēka) as a scroll-driven narrative. Content comes exclusively from pre-committed bundle files — fabrication or placeholder images are strictly prohibited. Deploy to GitHub Pages is out of scope for this chain.",
       "source_sections": [
         "What this is",
         "Repo placement (do not deviate)",
-        "Content (already pre-committed by the operator)",
+        "Content (must exist on main BEFORE chain starts)",
+        "Hard pre-flight check (chain MUST enforce — this exists to prevent the previous failure mode)",
         "What the page does",
-        "Visual direction"
+        "Visual direction",
+        "Plan budget"
       ],
       "tasks": [
         {
-          "title": "Scaffold Astro 4 project with global layout and build pipeline",
-          "description": "Create clients/painters-demo/v1/web/ as a self-contained Astro 4 + TypeScript project with static output. Provide package.json (npm run build → dist/), commit package-lock.json, and configure astro.config.mjs for static output. Implement global CSS: near-black background (#0c0c0e), off-white serif body type, sans-serif chrome, warm gold accent (#c8a96a). Add the thin sticky header (site title 'Latvian Painters: Five Names That Matter' + 5-dot nav as static placeholders for now) and the single-line attribution footer crediting enciklopedija.lv. index.astro should render a working skeleton (header + 5 empty section stubs + footer) that passes npm run build and emits dist/index.html. Do not touch the repo root package.json.",
+          "title": "Pre-flight check and Astro 4 project scaffold",
+          "description": "FIRST: check that all five painter metadata.json files exist at their exact canonical paths before doing any other work:\n- clients/painters-demo/v1/web/content/painters/karlis_huns_1831_3f3c/metadata.json\n- clients/painters-demo/v1/web/content/painters/jazeps_grosvalds_1891_72b1/metadata.json\n- clients/painters-demo/v1/web/content/painters/voldemars_irbe_1893_f992/metadata.json\n- clients/painters-demo/v1/web/content/painters/karlis_padegs_1911_0e0a/metadata.json\n- clients/painters-demo/v1/web/content/painters/lucia_peka_1912_60db/metadata.json\n\nIf any are missing: write the error (naming each missing file) to RESPONSE_FILE, exit the task with a non-zero status, and stop. Do NOT fabricate painter data, do NOT use placeholder image services, do NOT continue.\n\nIf all five are present: scaffold the Astro 4 project at clients/painters-demo/v1/web/. Create package.json (with npm run build emitting dist/), run npm install and commit package-lock.json, configure astro.config.mjs for static output, add tsconfig.json, and create Layout.astro with the dark background (#0c0c0e), Google Fonts (display serif for body, sans-serif for chrome), and a --accent-gold CSS custom property (#c8a96a). index.astro should render a minimal working skeleton (header + footer) that passes npm run build and emits dist/index.html. Do not modify the repo root package.json.",
           "acceptance_criteria": [
-            "npm ci && npm run build in clients/painters-demo/v1/web/ exits 0 and writes dist/index.html",
-            "package-lock.json is committed alongside package.json; the repo root package.json is unmodified",
-            "dist/index.html has the dark background (#0c0c0e), sticky header with the correct site title, and attribution footer visible in a browser",
-            "Gold accent (#c8a96a) and the serif/sans font pairing are present in the global CSS"
+            "If any of the five metadata.json files are absent, the task writes a clear error naming each missing file to RESPONSE_FILE and exits non-zero — no further scaffold or content work is done.",
+            "When all five files are present, npm ci && npm run build in clients/painters-demo/v1/web/ exits 0 and writes dist/index.html.",
+            "package-lock.json is committed alongside package.json; the repo root package.json is unmodified.",
+            "astro.config.mjs sets output: 'static'.",
+            "Layout.astro renders a valid HTML shell with the dark background colour, font imports, and --accent-gold set to #c8a96a."
           ],
           "dependencies": [],
           "priority": "high",
-          "complexity": "medium",
+          "complexity": "small",
           "source_sections": [
+            "Hard pre-flight check (chain MUST enforce — this exists to prevent the previous failure mode)",
             "Repo placement (do not deviate)",
-            "Visual direction",
-            "What the page does"
-          ],
-          "subtasks": []
-        },
-        {
-          "title": "Implement painter sections: hero, bio, gallery strip, and scroll animations",
-          "description": "Populate index.astro by importing the five metadata.json files directly via TypeScript at build time and reading each bio.txt. For each painter render a full-viewport section with: (a) profile_image_url as the CSS background with a ken-burns slow-zoom CSS animation triggered by an Intersection Observer when the section enters the viewport; (b) name_lv in large display serif, birth_year–death_year in smaller muted type beneath, name_en revealed on hover via CSS; (c) bio prose at max-width 60ch with generous line-height in serif body; (d) a horizontally scrolling gallery strip of gallery_urls[] images with descriptive alt text; (e) a gold 'Read on Encyclopaedia Latvija →' link pointing to article_url. Apply fade/slide-in entrance animations via Intersection Observer and CSS transitions only — no external animation libraries.",
-          "acceptance_criteria": [
-            "All five painter sections render with correct data sourced from the pre-committed metadata.json files; bio.txt content appears as readable prose",
-            "Each section's hero background shows the painter's profile image; the ken-burns zoom starts when the section scrolls into view",
-            "Hovering the Latvian name reveals the English transliteration; it is hidden at rest",
-            "The gallery strip scrolls horizontally and shows the correct images for each painter, each with non-empty alt text",
-            "Sections fade or slide in on viewport entry using only CSS transitions and the Intersection Observer API"
-          ],
-          "dependencies": [
-            "Scaffold Astro 4 project with global layout and build pipeline"
-          ],
-          "priority": "high",
-          "complexity": "large",
-          "source_sections": [
-            "Content (already pre-committed by the operator)",
-            "What the page does",
             "Visual direction"
           ],
           "subtasks": []
         },
         {
-          "title": "Add lightbox and dot-nav scroll tracking",
-          "description": "Implement two interactive JavaScript features. (1) Lightbox: clicking any gallery-strip image opens a full-screen overlay showing that image; the ← and → arrow keys (plus visible on-screen buttons) cycle through the painter's gallery_urls[]; pressing Esc closes the lightbox. (2) Dot-nav: the 5-dot sticky header uses an Intersection Observer to detect the dominant painter section in the viewport and highlights that dot in gold (#c8a96a); clicking a dot smooth-scrolls to the corresponding section. All interactivity should be vanilla JS in a small <script> block or .ts module — no frameworks.",
+          "title": "Implement painter sections: hero, bio, gallery strip, and scroll animations",
+          "description": "Populate index.astro by importing the five metadata.json files directly via TypeScript at build time and reading each bio.txt via Node fs. Render the five painters in chronological order (Hūns, Grosvalds, Irbe, Padegs, Pēka). Each painter section: (a) full-viewport hero with profile_image_url as the CSS background-image and a CSS ken-burns slow-zoom keyframe animation triggered by an Intersection Observer on entry; (b) name_lv in large display serif, birth_year–death_year in smaller muted type, name_en revealed on hover via CSS only; (c) bio prose from bio.txt rendered as plain text preserving paragraph breaks — no Markdown or HTML interpretation — at max-width 60ch with generous line-height; (d) a horizontally scrolling gallery strip of 3–6 images from metadata.json gallery_urls[] with alt text (no placeholder service URLs); (e) a warm-gold 'Read on Encyclopaedia Latvija →' link to article_url. Add fade/slide-in entrance animations for all sections using Intersection Observer + CSS transitions only — no external animation libraries. Add a thin sticky header with the site title ('Latvian Painters: Five Names That Matter') and 5-dot nav placeholders, and a single-line attribution footer crediting enciklopedija.lv.",
           "acceptance_criteria": [
-            "Clicking a gallery image opens the full-screen lightbox showing that image",
-            "← and → keys navigate between images in the same painter's gallery; wrapping at the ends is acceptable",
-            "Pressing Esc closes the lightbox",
-            "As the user scrolls, the active dot in the sticky header updates to reflect the painter section nearest the top of the viewport",
-            "Clicking a dot scrolls the page smoothly to the corresponding painter section"
+            "All five painter sections appear in source order; each hero background URL exactly matches profile_image_url from that painter's metadata.json.",
+            "Bio text is verbatim from bio.txt with paragraph breaks intact; no Markdown rendering or HTML escaping artifacts are visible.",
+            "Gallery strip shows 3–6 images per painter sourced from metadata.json gallery_urls[]; zero placeholder service URLs (picsum, unsplash, lorem-picsum, plaiceholder, etc.) appear in the built HTML.",
+            "Fade/slide-in animations fire on viewport entry using only Intersection Observer and CSS transitions — no animation library imports.",
+            "Ken-burns zoom on hero entry uses CSS keyframe animation on transform/scale only.",
+            "npm run build completes with no TypeScript errors."
+          ],
+          "dependencies": [
+            "Pre-flight check and Astro 4 project scaffold"
+          ],
+          "priority": "high",
+          "complexity": "large",
+          "source_sections": [
+            "What the page does",
+            "Content (must exist on main BEFORE chain starts)",
+            "Visual direction",
+            "What we are NOT doing"
+          ],
+          "subtasks": []
+        },
+        {
+          "title": "Add lightbox and sticky dot-nav scroll tracking",
+          "description": "Lightbox: clicking any gallery-strip image opens a full-screen overlay displaying that image. The ← / → keyboard keys (and optional on-screen buttons) navigate between that painter's gallery images in order; Esc closes the overlay. The lightbox must be fully keyboard-accessible without mouse. Dot-nav: each of the five dots in the sticky header corresponds to one painter section. The active dot is styled in warm gold (#c8a96a) and updates as sections enter the viewport via Intersection Observer with a rootMargin that ensures exactly one dot is active at any scroll position. Clicking a dot smooth-scrolls to the corresponding section. Implement with vanilla JS in a small script block or .ts module — no external UI or animation library.",
+          "acceptance_criteria": [
+            "Clicking any gallery image opens the lightbox displaying that image full-screen.",
+            "ArrowLeft / ArrowRight navigate between images in the painter's gallery; Escape closes the lightbox — all work without mouse.",
+            "Sticky header stays pinned at the top across the full scroll range of the page.",
+            "Exactly one dot is gold at every scroll position; the active dot changes correctly as the user scrolls between sections.",
+            "Clicking a dot smooth-scrolls the viewport to the corresponding painter section.",
+            "No new npm dependencies are added for lightbox or dot-nav (vanilla JS + CSS only)."
           ],
           "dependencies": [
             "Implement painter sections: hero, bio, gallery strip, and scroll animations"
@@ -71,31 +77,29 @@
           "priority": "medium",
           "complexity": "medium",
           "source_sections": [
-            "What the page does"
+            "What the page does",
+            "Visual direction"
           ],
           "subtasks": []
         },
         {
           "title": "E2E: Latvian painters gallery renders and navigates end-to-end",
-          "description": "After all three feature PRs are merged to main, run npm ci && npm run build in clients/painters-demo/v1/web/ and serve dist/ locally (e.g. npx serve dist or python -m http.server). Walk the full user journey: scroll through all five painter sections, hover each painter name to confirm the English transliteration appears, click a gallery image to open the lightbox, navigate ← and → with the keyboard, press Esc to close, and observe that the active dot in the sticky header updates throughout. Capture screenshots or a short screen recording covering each of these interactions. Note any broken image URLs or visual regressions in the PR description.",
+          "description": "Run a Playwright (or equivalent headless-browser) test against the production build served locally (npx astro preview or a static HTTP server on dist/). The test must: (1) assert exactly five section headings whose text matches the Latvian names from each painter's metadata.json; (2) scroll through all five sections and assert the corresponding dot in the sticky header becomes active; (3) click a gallery image, assert the lightbox opens, press ArrowRight to advance one image, press Escape to close; (4) assert that no image src in the built HTML points to a placeholder service. Commit at least one screenshot or Playwright video recording as a PR artefact proving the page renders with real content.",
           "acceptance_criteria": [
-            "npm ci && npm run build exits 0 with no errors about missing content files",
-            "All five painter sections are visible on scroll: hero background image loads, name, lifespan, bio, gallery strip, and encyclopedia link are each present and correctly attributed",
-            "Hovering a Latvian painter name shows the English transliteration as specified",
-            "Opening a gallery image launches the lightbox; ← / → keyboard navigation and Esc close work as specified",
-            "The active dot in the sticky header changes as the user scrolls between painter sections",
-            "Screenshots or a screen recording covering the full journey are attached to the PR as evidence"
+            "Test finds exactly five section headings whose text matches name_lv from each painter's metadata.json, in source order.",
+            "Scrolling to each section causes the corresponding dot to become active; the test asserts or screenshots show all five active-dot states.",
+            "Lightbox opens on image click; ArrowRight advances to the next image; Escape closes — each step asserted or captured in a video trace.",
+            "Zero image src values in the built HTML contain picsum, unsplash, lorem-picsum, or plaiceholder hostnames.",
+            "At least one screenshot or Playwright video artefact is committed in the PR showing real painter names and images rendered on screen."
           ],
           "dependencies": [
-            "Scaffold Astro 4 project with global layout and build pipeline",
-            "Implement painter sections: hero, bio, gallery strip, and scroll animations",
-            "Add lightbox and dot-nav scroll tracking"
+            "Add lightbox and sticky dot-nav scroll tracking"
           ],
           "priority": "medium",
-          "complexity": "small",
+          "complexity": "medium",
           "source_sections": [
-            "What this is",
-            "What the page does"
+            "What the page does",
+            "Hard pre-flight check (chain MUST enforce — this exists to prevent the previous failure mode)"
           ],
           "subtasks": []
         }
