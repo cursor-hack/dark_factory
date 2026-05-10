@@ -8,21 +8,37 @@
   <meta property="og:title" content="Dark Factory — Hackathon jury deck">
   <meta property="og:description" content="A factory layer between your tracker and production: structured plans, implementation, and shipped product—built for cost-conscious enterprises and non-technical founders.">
   <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dark Factory — Hackathon jury deck">
+  <meta name="twitter:description" content="Turn backlog intent into reviewable software and shipped product—without scaling headcount first.">
+  <meta name="theme-color" content="#06080d">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-deep: #0a0e14;
-      --bg-card: rgba(18, 24, 33, 0.72);
-      --bg-card-border: rgba(94, 234, 212, 0.12);
-      --text: #e8edf4;
-      --text-muted: #8b9bb0;
+      --bg-deep: #06080d;
+      --bg-elevated: rgba(16, 22, 32, 0.65);
+      --bg-card: rgba(18, 26, 38, 0.55);
+      --bg-card-border: rgba(148, 163, 184, 0.12);
+      --bg-card-hover: rgba(24, 34, 50, 0.72);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
       --accent: #2dd4bf;
-      --accent-dim: rgba(45, 212, 191, 0.15);
-      --accent-glow: rgba(45, 212, 191, 0.35);
-      --radius: 14px;
-      --font-sans: system-ui, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+      --accent-bright: #5eead4;
+      --accent-dim: rgba(45, 212, 191, 0.12);
+      --accent-glow: rgba(45, 212, 191, 0.4);
+      --violet: #a78bfa;
+      --violet-dim: rgba(167, 139, 250, 0.12);
+      --radius: 16px;
+      --radius-lg: 22px;
+      --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
       --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
-      --space-section: clamp(3.5rem, 8vw, 6rem);
-      --max-width: 68rem;
+      --space-section: clamp(4rem, 10vw, 7rem);
+      --max-width: 70rem;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
+      --shadow-md: 0 12px 40px -12px rgba(0, 0, 0, 0.65);
+      --shadow-glow: 0 0 80px -20px rgba(45, 212, 191, 0.25);
     }
 
     *,
@@ -51,13 +67,31 @@
     body {
       margin: 0;
       font-family: var(--font-sans);
-      font-size: clamp(1rem, 0.95rem + 0.2vw, 1.0625rem);
-      line-height: 1.6;
+      font-size: clamp(1rem, 0.92rem + 0.25vw, 1.075rem);
+      line-height: 1.65;
+      letter-spacing: -0.011em;
       color: var(--text);
-      background: var(--bg-deep);
+      background-color: var(--bg-deep);
       background-image:
-        radial-gradient(ellipse 120% 80% at 50% -20%, rgba(45, 212, 191, 0.08), transparent 55%),
-        radial-gradient(ellipse 60% 50% at 100% 50%, rgba(59, 130, 246, 0.06), transparent 45%);
+        radial-gradient(ellipse 100% 70% at 50% -25%, rgba(45, 212, 191, 0.14), transparent 50%),
+        radial-gradient(ellipse 55% 45% at 100% 15%, rgba(167, 139, 250, 0.09), transparent 42%),
+        radial-gradient(ellipse 50% 40% at 0% 60%, rgba(59, 130, 246, 0.07), transparent 45%),
+        linear-gradient(180deg, rgba(15, 23, 42, 0.5) 0%, transparent 35%),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 80px,
+          rgba(148, 163, 184, 0.03) 80px,
+          rgba(148, 163, 184, 0.03) 81px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 80px,
+          rgba(148, 163, 184, 0.03) 80px,
+          rgba(148, 163, 184, 0.03) 81px
+        );
+      background-attachment: fixed;
     }
 
     a {
@@ -67,7 +101,7 @@
     }
 
     a:hover {
-      color: #5eead4;
+      color: var(--accent-bright);
     }
 
     a:focus-visible {
@@ -107,9 +141,11 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      backdrop-filter: blur(12px);
-      background: rgba(10, 14, 20, 0.85);
-      border-bottom: 1px solid var(--bg-card-border);
+      backdrop-filter: blur(16px) saturate(1.2);
+      -webkit-backdrop-filter: blur(16px) saturate(1.2);
+      background: linear-gradient(180deg, rgba(6, 8, 13, 0.92) 0%, rgba(6, 8, 13, 0.78) 100%);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+      box-shadow: 0 1px 0 rgba(45, 212, 191, 0.06);
     }
 
     .header-inner {
@@ -118,37 +154,73 @@
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      padding: 0.85rem 0;
+      padding: 0.9rem 0;
+    }
+
+    @media (max-width: 64rem) {
+      .header-inner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .brand {
+        text-align: center;
+      }
+
+      nav.site-nav {
+        width: 100%;
+      }
+
+      nav.site-nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        border-radius: var(--radius);
+      }
     }
 
     .brand {
-      font-weight: 700;
-      font-size: 1rem;
-      letter-spacing: 0.02em;
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
       color: var(--text);
     }
 
     .brand span {
-      color: var(--accent);
+      background: linear-gradient(135deg, var(--accent-bright), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    nav.site-nav {
+      max-width: 100%;
     }
 
     nav.site-nav ul {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem 1.25rem;
+      gap: 0.35rem 0.5rem;
       list-style: none;
       margin: 0;
-      padding: 0;
+      padding: 0.25rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(148, 163, 184, 0.08);
     }
 
     nav.site-nav a {
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
       color: var(--text-muted);
       text-decoration: none;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      transition: color 0.2s ease, background 0.2s ease;
     }
 
     nav.site-nav a:hover {
-      color: var(--accent);
+      color: var(--text);
+      background: rgba(45, 212, 191, 0.1);
     }
 
     main {
@@ -157,11 +229,51 @@
 
     section {
       padding-block: var(--space-section);
-      scroll-margin-top: 4rem;
+      scroll-margin-top: 4.5rem;
+      position: relative;
     }
 
     section.section--alt {
-      background: linear-gradient(180deg, rgba(45, 212, 191, 0.03) 0%, transparent 40%);
+      background:
+        linear-gradient(180deg, rgba(45, 212, 191, 0.045) 0%, transparent 50%),
+        linear-gradient(90deg, transparent 0%, rgba(167, 139, 250, 0.03) 50%, transparent 100%);
+    }
+
+    section.section--alt::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(45, 212, 191, 0.06), transparent 65%);
+    }
+
+    section.section--alt > .wrap {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-kicker {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin: 0 0 0.5rem;
+    }
+
+    .section-lead {
+      color: var(--text-muted);
+      max-width: 62ch;
+      margin: 0 0 1.5rem;
+    }
+
+    .section-lead strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .section-lead--tight {
+      margin-bottom: 1rem;
     }
 
     .visually-hidden {
@@ -176,31 +288,75 @@
       border: 0;
     }
 
+    .hero {
+      padding-top: clamp(2.5rem, 6vw, 4rem);
+      padding-bottom: clamp(1rem, 3vw, 2rem);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: -20%;
+      right: -15%;
+      width: min(55vw, 28rem);
+      height: min(55vw, 28rem);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(45, 212, 191, 0.12) 0%, transparent 70%);
+      filter: blur(40px);
+      pointer-events: none;
+    }
+
+    .hero .wrap {
+      position: relative;
+      z-index: 1;
+    }
+
     h1 {
-      font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
-      line-height: 1.1;
+      font-size: clamp(2.35rem, 1.4rem + 3.5vw, 3.65rem);
+      line-height: 1.08;
       font-weight: 800;
-      letter-spacing: -0.03em;
-      margin: 0 0 1rem;
+      letter-spacing: -0.035em;
+      margin: 0 0 1.1rem;
+      max-width: min(100%, 22rem);
     }
 
     h2 {
-      font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+      font-size: clamp(1.55rem, 1.15rem + 1.35vw, 2.1rem);
       margin: 0 0 1rem;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.028em;
+      font-weight: 700;
+      line-height: 1.2;
+      max-width: min(100%, 36rem);
     }
 
     h3 {
       font-size: 1.125rem;
       margin: 0 0 0.5rem;
       color: var(--text);
+      font-weight: 600;
+      letter-spacing: -0.02em;
     }
 
     .lede {
-      font-size: clamp(1.125rem, 1rem + 0.5vw, 1.35rem);
+      font-size: clamp(1.125rem, 1rem + 0.45vw, 1.32rem);
       color: var(--text-muted);
-      max-width: 42ch;
-      margin: 0 0 1.75rem;
+      max-width: 48ch;
+      margin: 0 0 1.85rem;
+      line-height: 1.55;
+    }
+
+    .lede strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .text-gradient {
+      background: linear-gradient(125deg, #5eead4 0%, #2dd4bf 40%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
     .hero-actions {
@@ -214,56 +370,101 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 0.65rem 1.25rem;
+      gap: 0.35rem;
+      padding: 0.7rem 1.35rem;
       border-radius: 999px;
       font-weight: 600;
       font-size: 0.9375rem;
       border: 1px solid transparent;
       cursor: pointer;
       text-decoration: none;
-      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      transition: background 0.22s ease, border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #14b8a6, #0d9488);
+      background: linear-gradient(145deg, #2dd4bf 0%, #14b8a6 45%, #0d9488 100%);
       color: #042f2e;
-      box-shadow: 0 0 0 1px var(--accent-glow);
+      box-shadow:
+        var(--shadow-sm),
+        0 0 0 1px rgba(45, 212, 191, 0.35),
+        0 8px 32px -8px rgba(45, 212, 191, 0.45);
     }
 
     .btn-primary:hover {
-      color: #022c22;
-      filter: brightness(1.05);
+      color: #021916;
+      transform: translateY(-1px);
+      box-shadow:
+        var(--shadow-sm),
+        0 0 0 1px rgba(94, 234, 212, 0.5),
+        0 14px 40px -10px rgba(45, 212, 191, 0.55);
     }
 
     .btn-ghost {
-      background: var(--accent-dim);
-      color: var(--accent);
-      border-color: var(--bg-card-border);
+      background: rgba(15, 23, 42, 0.6);
+      color: var(--accent-bright);
+      border-color: rgba(45, 212, 191, 0.22);
+      backdrop-filter: blur(8px);
     }
 
     .btn-ghost:hover {
-      border-color: var(--accent);
-      color: #5eead4;
+      border-color: rgba(45, 212, 191, 0.45);
+      color: #99f6e4;
+      background: rgba(45, 212, 191, 0.08);
     }
 
     .pill {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.6875rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--accent);
-      background: var(--accent-dim);
-      padding: 0.35rem 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--accent-bright);
+      background: linear-gradient(135deg, rgba(45, 212, 191, 0.18), rgba(167, 139, 250, 0.1));
+      padding: 0.4rem 0.9rem;
       border-radius: 999px;
-      margin-bottom: 1rem;
+      margin-bottom: 1.15rem;
+      border: 1px solid rgba(45, 212, 191, 0.22);
+      box-shadow: 0 0 24px -8px rgba(45, 212, 191, 0.35);
+    }
+
+    .pill::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
     }
 
     .card {
       background: var(--bg-card);
       border: 1px solid var(--bg-card-border);
-      border-radius: var(--radius);
-      padding: clamp(1.25rem, 3vw, 1.75rem);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.35rem, 3.2vw, 1.9rem);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(45, 212, 191, 0.18);
+      background: var(--bg-card-hover);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card:hover {
+        transform: none;
+      }
+    }
+
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md), var(--shadow-glow);
+      }
     }
 
     .grid-2 {
@@ -288,36 +489,75 @@
       }
     }
 
-    ul.clean {
+    ul.clean,
+    ol.clean {
       margin: 0;
-      padding-left: 1.15rem;
+      padding-left: 1.2rem;
       color: var(--text-muted);
     }
 
-    ul.clean li {
-      margin-bottom: 0.5rem;
+    ul.clean li,
+    ol.clean li {
+      margin-bottom: 0.55rem;
+      padding-left: 0.15rem;
     }
 
-    ul.clean strong {
+    ul.clean strong,
+    ol.clean strong {
       color: var(--text);
+    }
+
+    ol.clean {
+      list-style-position: outside;
+    }
+
+    .clean--spaced-below {
+      margin-bottom: 1.5rem;
+    }
+
+    .card .note {
+      margin: 1rem 0 0;
+      color: var(--text-muted);
+      font-size: 0.9375rem;
+    }
+
+    .card .note strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .muted {
+      margin: 0;
+      color: var(--text-muted);
+    }
+
+    .muted strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .muted--narrow {
+      max-width: 65ch;
     }
 
     code, .mono {
       font-family: var(--font-mono);
       font-size: 0.88em;
-      background: rgba(0, 0, 0, 0.35);
-      padding: 0.12em 0.35em;
-      border-radius: 6px;
-      border: 1px solid var(--bg-card-border);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 0.14em 0.4em;
+      border-radius: 8px;
+      border: 1px solid rgba(45, 212, 191, 0.12);
     }
 
     .diagram-wrap {
-      margin-top: 1.5rem;
-      padding: 1.25rem;
-      border-radius: var(--radius);
-      border: 1px solid var(--bg-card-border);
-      background: rgba(0, 0, 0, 0.25);
+      margin-top: 1.75rem;
+      padding: clamp(1.25rem, 3vw, 1.75rem);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(45, 212, 191, 0.14);
+      background:
+        linear-gradient(165deg, rgba(15, 23, 42, 0.9) 0%, rgba(6, 8, 13, 0.75) 100%);
       overflow-x: auto;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), var(--shadow-md);
     }
 
     .diagram-wrap svg {
@@ -329,22 +569,51 @@
 
     .screenshot-slot {
       aspect-ratio: 16 / 10;
-      border-radius: 10px;
-      border: 2px dashed rgba(45, 212, 191, 0.35);
-      background: linear-gradient(145deg, rgba(45, 212, 191, 0.06), rgba(0, 0, 0, 0.2));
+      border-radius: 14px;
+      border: 1px dashed rgba(45, 212, 191, 0.35);
+      background:
+        linear-gradient(160deg, rgba(45, 212, 191, 0.07) 0%, rgba(167, 139, 250, 0.04) 50%, rgba(0, 0, 0, 0.35) 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
       text-align: center;
-      padding: 1rem;
+      padding: 1.25rem;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: border-color 0.25s ease, background 0.25s ease;
+    }
+
+    .figure-card:hover .screenshot-slot {
+      border-color: rgba(94, 234, 212, 0.45);
+      background:
+        linear-gradient(160deg, rgba(45, 212, 191, 0.1) 0%, rgba(167, 139, 250, 0.06) 50%, rgba(0, 0, 0, 0.3) 100%);
     }
 
     .screenshot-slot span {
       font-size: 0.8125rem;
       color: var(--text-muted);
       max-width: 18ch;
+    }
+
+    .screenshot-slot span:first-of-type {
+      font-weight: 700;
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+
+    .figure-card {
+      margin: 0;
+      padding: 0.85rem;
+    }
+
+    .figure-card figcaption {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      margin-top: 0.7rem;
+      padding: 0 0.2rem;
     }
 
     .team-grid {
@@ -364,20 +633,21 @@
     }
 
     .avatar {
-      width: 4rem;
-      height: 4rem;
+      width: 4.25rem;
+      height: 4.25rem;
       border-radius: 50%;
-      margin: 0 auto 0.75rem;
-      background: var(--accent-dim);
-      border: 2px dashed rgba(45, 212, 191, 0.4);
+      margin: 0 auto 0.85rem;
+      background: linear-gradient(145deg, rgba(45, 212, 191, 0.15), rgba(167, 139, 250, 0.1));
+      border: 1px solid rgba(45, 212, 191, 0.35);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--accent);
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: var(--accent-bright);
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
+      box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.5);
     }
 
     .team-role {
@@ -387,10 +657,11 @@
     }
 
     footer.site-footer {
-      border-top: 1px solid var(--bg-card-border);
-      padding: 2rem 0 3rem;
+      border-top: 1px solid rgba(148, 163, 184, 0.1);
+      padding: 2.5rem 0 3.5rem;
       color: var(--text-muted);
       font-size: 0.875rem;
+      background: linear-gradient(0deg, rgba(6, 8, 13, 0.95), transparent);
     }
 
     footer.site-footer .wrap {
@@ -399,6 +670,31 @@
       gap: 1rem;
       justify-content: space-between;
       align-items: center;
+    }
+
+    footer.site-footer a {
+      font-weight: 600;
+    }
+
+    .team-card h3 {
+      margin-bottom: 0.3rem;
+    }
+
+    .card--cta {
+      margin-top: 1.5rem;
+      border-color: rgba(167, 139, 250, 0.15);
+      background: linear-gradient(135deg, rgba(24, 34, 50, 0.85), rgba(18, 26, 38, 0.55));
+    }
+
+    .card--cta h3 {
+      margin-top: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn-primary:hover,
+      .btn-ghost:hover {
+        transform: none;
+      }
     }
   </style>
 </head>
@@ -426,7 +722,7 @@
     <section id="top" class="hero" aria-labelledby="hero-title">
       <div class="wrap">
         <p class="pill">Hackathon jury presentation</p>
-        <h1 id="hero-title">Turn intent into working software—without scaling headcount first.</h1>
+        <h1 id="hero-title">Turn intent into <span class="text-gradient">working software</span>—without scaling headcount first.</h1>
         <p class="lede">
           <strong>Dark Factory</strong> is the layer between what you write in your tracker and what lands in your codebase and live product.
           You describe the work; the <strong>factory</strong> produces plans, implementation, and releases—then hands status cleanly back to your team.
@@ -441,18 +737,19 @@
 
     <section id="problem" class="section--alt" aria-labelledby="problem-title">
       <div class="wrap">
+        <p class="section-kicker">Audience</p>
         <h2 id="problem-title">Who this is for</h2>
         <div class="grid-2">
           <div class="card">
             <h3>Enterprises under cost pressure</h3>
-            <p style="margin: 0; color: var(--text-muted);">
+            <p class="muted">
               Large engineering organisations need the same throughput with <strong>leaner teams</strong>—or the same team covering more product surface—without
               losing traceability from request to release. The gap is not ambition; it is <strong>repeatable execution</strong> at sustainable cost.
             </p>
           </div>
           <div class="card">
             <h3>Founders without a technical co-pilot</h3>
-            <p style="margin: 0; color: var(--text-muted);">
+            <p class="muted">
               Small teams have the idea and the urgency, but not a dedicated engineer to turn specs into shippable software.
               They need a path from <strong>plain-language intent</strong> to <strong>reviewable output</strong>—without hiring a full stack role on day one.
             </p>
@@ -463,8 +760,9 @@
 
     <section id="solution" aria-labelledby="solution-title">
       <div class="wrap">
+        <p class="section-kicker">Product</p>
         <h2 id="solution-title">What Dark Factory is</h2>
-        <p style="max-width: 60ch; color: var(--text-muted); margin: 0 0 1.5rem;">
+        <p class="section-lead">
           A <strong>factory</strong> that sits between your issue tracker and your product: you record <strong>what you want</strong> in the tools you already use;
           the factory turns that into <strong>structured plans</strong>, <strong>reviewable implementation</strong>, and <strong>shipped experiences</strong>—with status flowing back to the same place your stakeholders already look.
         </p>
@@ -481,13 +779,14 @@
 
     <section id="how-it-works" class="section--alt" aria-labelledby="how-title">
       <div class="wrap">
+        <p class="section-kicker">Flow</p>
         <h2 id="how-title">How it works: the factory in the middle</h2>
-        <p style="color: var(--text-muted); margin: 0 0 1rem; max-width: 65ch;">
+        <p class="section-lead section-lead--tight muted--narrow">
           You start from the same <strong>ticket or brief</strong> your organisation already uses. The <strong>factory</strong> is the single place where intent becomes
           plans, code, and releases—so we do not walk the jury through our internal build steps or toolchain on this slide.
           What matters on stage is the <strong>contract</strong>: clear inputs, reviewable outputs, and a closed loop back to stakeholders.
         </p>
-        <ul class="clean" style="margin-bottom: 1.5rem;">
+        <ul class="clean clean--spaced-below">
           <li><strong>Transparency where it counts:</strong> every run leaves <strong>artefacts your team can inspect</strong>—not a black-box chat log.</li>
           <li><strong>Two speeds:</strong> <strong>implementation</strong> when you want code in flight, or <strong>answer-only</strong> when you need a crisp reply without touching the product surface.</li>
           <li><strong>Closure:</strong> when you accept the change, the tracker reflects <strong>Done</strong>—the loop completes without extra ceremony.</li>
@@ -507,6 +806,7 @@
               </linearGradient>
               <linearGradient id="factoryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" style="stop-color:#134e4a"/>
+                <stop offset="55%" style="stop-color:#1e1b4b"/>
                 <stop offset="100%" style="stop-color:#0f172a"/>
               </linearGradient>
               <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
@@ -545,20 +845,21 @@
 
     <section id="planning" aria-labelledby="planning-title">
       <div class="wrap">
-        <h2 id="planning-title">Planning lane: from messy requirements to an approved structure</h2>
-        <p style="color: var(--text-muted); margin: 0 0 1rem; max-width: 65ch;">
+        <p class="section-kicker">Planning lane</p>
+        <h2 id="planning-title">From messy requirements to an approved structure</h2>
+        <p class="section-lead section-lead--tight muted--narrow">
           The factory ingests what is already written on the issue—notes, acceptance hints, scope—and produces a <strong>structured plan</strong> your leads can inspect.
           Nothing bulk-writes to your tracker until you are comfortable: you get a <strong>dry run</strong>, then an explicit <strong>approval gate</strong> before creation.
         </p>
         <div class="card">
-          <ol class="clean" style="padding-left: 1.25rem;">
+          <ol class="clean">
             <li>Capture requirements from the ticket in one place.</li>
             <li>The factory proposes epics, tasks, and subtasks in a <strong>validated</strong> format.</li>
             <li>Review the preview; approve when it matches your intent.</li>
             <li>Apply once—<strong>re-runs stay safe</strong> so you do not spam duplicate work items.</li>
             <li>Stakeholders see a concise summary on the same issue they started from.</li>
           </ol>
-          <p style="margin: 1rem 0 0; color: var(--text-muted); font-size: 0.9375rem;">
+          <p class="note">
             Under the hood the factory enforces <strong>schema checks</strong> and <strong>idempotent apply</strong>; the jury story is <strong>governance and cost control</strong>, not our file layout.
           </p>
         </div>
@@ -567,12 +868,13 @@
 
     <section id="shipping" aria-labelledby="shipping-title">
       <div class="wrap">
-        <h2 id="shipping-title">Shipping lane: customer-facing product without a release playbook debate</h2>
-        <p style="color: var(--text-muted); margin: 0 0 1rem; max-width: 65ch;">
+        <p class="section-kicker">Shipping lane</p>
+        <h2 id="shipping-title">Customer-facing product without a release playbook debate</h2>
+        <p class="section-lead section-lead--tight muted--narrow">
           When the user-facing experience is ready, the <strong>factory</strong> runs the <strong>release path</strong>—producing a production-ready build and publishing it to
           <strong>managed hosting</strong> your team already trusts. The trigger can be the same tracker button your PM uses for scope, so “ship it” is not a separate ritual.
         </p>
-        <p style="margin: 0; color: var(--text-muted); font-size: 0.9375rem;">
+        <p class="note muted--narrow">
           We deliberately do <strong>not</strong> detail our compile, bundle, or CI graph here: for the jury, the punch line is <strong>repeatable delivery</strong> from approved mainline to live URL—with confirmation back on the ticket.
         </p>
       </div>
@@ -580,6 +882,7 @@
 
     <section id="trust" class="section--alt" aria-labelledby="trust-title">
       <div class="wrap">
+        <p class="section-kicker">Trust</p>
         <h2 id="trust-title">Why this is credible</h2>
         <div class="grid-2">
           <ul class="clean">
@@ -598,8 +901,9 @@
 
     <section id="scope" aria-labelledby="scope-title">
       <div class="wrap">
+        <p class="section-kicker">Scope</p>
         <h2 id="scope-title">What we did not claim</h2>
-        <p style="margin: 0; color: var(--text-muted); max-width: 65ch;">
+        <p class="muted muted--narrow">
           Dark Factory is <strong>execution leverage</strong>, not a substitute for judgment: architecture, security sign-off, and roadmap calls stay human-owned.
           The factory removes repetitive translation from intent to artefact—especially valuable when <strong>headcount is tight</strong> or <strong>technical depth is missing</strong> on the founding team.
         </p>
@@ -608,33 +912,34 @@
 
     <section id="demo" aria-labelledby="demo-title">
       <div class="wrap">
+        <p class="section-kicker">Evidence</p>
         <h2 id="demo-title">Demo &amp; proof</h2>
-        <p style="color: var(--text-muted); margin: 0 0 1.25rem;">
+        <p class="section-lead section-lead--tight">
           Replace the placeholders below with screenshots (tracker request, factory output or progress, reviewable deliverable or live product).
         </p>
         <div class="grid-3">
-          <figure class="card" style="margin: 0; padding: 0.75rem;">
+          <figure class="card figure-card">
             <div class="screenshot-slot" role="img" aria-label="Placeholder for screenshot 1: tracker or request">
               <span>Screenshot 1</span>
               <span>Request in tracker</span>
             </div>
-            <figcaption style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.65rem; padding: 0 0.25rem;">
+            <figcaption>
               <!-- Swap img in here: <img src="..." alt="..." width="..." height="..." loading="lazy"> -->
             </figcaption>
           </figure>
-          <figure class="card" style="margin: 0; padding: 0.75rem;">
+          <figure class="card figure-card">
             <div class="screenshot-slot" role="img" aria-label="Placeholder for screenshot 2: factory progress or output">
               <span>Screenshot 2</span>
               <span>Factory in action</span>
             </div>
-            <figcaption style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.65rem; padding: 0 0.25rem;"></figcaption>
+            <figcaption></figcaption>
           </figure>
-          <figure class="card" style="margin: 0; padding: 0.75rem;">
+          <figure class="card figure-card">
             <div class="screenshot-slot" role="img" aria-label="Placeholder for screenshot 3: review or live product">
               <span>Screenshot 3</span>
               <span>Review or live product</span>
             </div>
-            <figcaption style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.65rem; padding: 0 0.25rem;"></figcaption>
+            <figcaption></figcaption>
           </figure>
         </div>
       </div>
@@ -642,30 +947,31 @@
 
     <section id="team" aria-labelledby="team-title">
       <div class="wrap">
+        <p class="section-kicker">People</p>
         <h2 id="team-title">Team</h2>
-        <p style="color: var(--text-muted); margin: 0 0 1.25rem;">
+        <p class="section-lead section-lead--tight">
           <!-- Replace names and roles when ready -->
         </p>
         <div class="team-grid">
           <div class="card team-card">
             <div class="avatar" aria-hidden="true">TBD</div>
-            <h3 style="margin-bottom: 0.25rem;">Team member 1</h3>
+            <h3>Team member 1</h3>
             <p class="team-role">Role (TBD)</p>
           </div>
           <div class="card team-card">
             <div class="avatar" aria-hidden="true">TBD</div>
-            <h3 style="margin-bottom: 0.25rem;">Team member 2</h3>
+            <h3>Team member 2</h3>
             <p class="team-role">Role (TBD)</p>
           </div>
           <div class="card team-card">
             <div class="avatar" aria-hidden="true">TBD</div>
-            <h3 style="margin-bottom: 0.25rem;">Team member 3</h3>
+            <h3>Team member 3</h3>
             <p class="team-role">Role (TBD)</p>
           </div>
         </div>
-        <div class="card" style="margin-top: 1.5rem;">
-          <h3 style="margin-top: 0;">Ask for the jury</h3>
-          <p style="margin: 0; color: var(--text-muted);">
+        <div class="card card--cta">
+          <h3>Ask for the jury</h3>
+          <p class="muted">
             We would love feedback on product positioning, safety controls, and what you would need to run something like this
             inside a regulated or high-stakes engineering org. Thank you for your time and attention.
           </p>
@@ -676,8 +982,8 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <p style="margin: 0;">Dark Factory — hackathon presentation. Single static file; open locally or host as you prefer.</p>
-      <p style="margin: 0;"><a href="#top">Back to top</a></p>
+      <p class="muted">Dark Factory — hackathon presentation. Single static file; open locally or host as you prefer.</p>
+      <p class="muted"><a href="#top">Back to top</a></p>
     </div>
   </footer>
 </body>
