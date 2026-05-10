@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dark Factory — Hackathon jury deck</title>
+  <meta name="description" content="Dark Factory turns backlog intent into reviewable software and shipped product—so enterprises can stretch engineering budgets and founders can ship without a full-time tech team.">
+  <meta property="og:title" content="Dark Factory — Hackathon jury deck">
+  <meta property="og:description" content="A factory layer between your tracker and production: structured plans, implementation, and shipped product—built for cost-conscious enterprises and non-technical founders.">
+  <meta property="og:type" content="website">
+  <style>
+    :root {
+      --bg-deep: #0a0e14;
+      --bg-card: rgba(18, 24, 33, 0.72);
+      --bg-card-border: rgba(94, 234, 212, 0.12);
+      --text: #e8edf4;
+      --text-muted: #8b9bb0;
+      --accent: #2dd4bf;
+      --accent-dim: rgba(45, 212, 191, 0.15);
+      --accent-glow: rgba(45, 212, 191, 0.35);
+      --radius: 14px;
+      --font-sans: system-ui, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+      --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
+      --space-section: clamp(3.5rem, 8vw, 6rem);
+      --max-width: 68rem;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: clamp(1rem, 0.95rem + 0.2vw, 1.0625rem);
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--bg-deep);
+      background-image:
+        radial-gradient(ellipse 120% 80% at 50% -20%, rgba(45, 212, 191, 0.08), transparent 55%),
+        radial-gradient(ellipse 60% 50% at 100% 50%, rgba(59, 130, 246, 0.06), transparent 45%);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    a:hover {
+      color: #5eead4;
+    }
+
+    a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    .skip {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .skip:focus {
+      position: fixed;
+      left: 1rem;
+      top: 1rem;
+      width: auto;
+      height: auto;
+      padding: 0.75rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: var(--radius);
+      z-index: 100;
+    }
+
+    .wrap {
+      width: min(100% - 2rem, var(--max-width));
+      margin-inline: auto;
+    }
+
+    header.site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(10, 14, 20, 0.85);
+      border-bottom: 1px solid var(--bg-card-border);
+    }
+
+    .header-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 0;
+    }
+
+    .brand {
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+      color: var(--text);
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    nav.site-nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav.site-nav a {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    nav.site-nav a:hover {
+      color: var(--accent);
+    }
+
+    main {
+      padding-bottom: var(--space-section);
+    }
+
+    section {
+      padding-block: var(--space-section);
+      scroll-margin-top: 4rem;
+    }
+
+    section.section--alt {
+      background: linear-gradient(180deg, rgba(45, 212, 191, 0.03) 0%, transparent 40%);
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    h1 {
+      font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin: 0 0 1rem;
+    }
+
+    h2 {
+      font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+      margin: 0 0 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      font-size: 1.125rem;
+      margin: 0 0 0.5rem;
+      color: var(--text);
+    }
+
+    .lede {
+      font-size: clamp(1.125rem, 1rem + 0.5vw, 1.35rem);
+      color: var(--text-muted);
+      max-width: 42ch;
+      margin: 0 0 1.75rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 1.25rem;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #14b8a6, #0d9488);
+      color: #042f2e;
+      box-shadow: 0 0 0 1px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      color: #022c22;
+      filter: brightness(1.05);
+    }
+
+    .btn-ghost {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border-color: var(--bg-card-border);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: #5eead4;
+    }
+
+    .pill {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: var(--radius);
+      padding: clamp(1.25rem, 3vw, 1.75rem);
+    }
+
+    .grid-2 {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 52rem) {
+      .grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .grid-3 {
+      display: grid;
+      gap: 1rem;
+    }
+
+    @media (min-width: 40rem) {
+      .grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    ul.clean {
+      margin: 0;
+      padding-left: 1.15rem;
+      color: var(--text-muted);
+    }
+
+    ul.clean li {
+      margin-bottom: 0.5rem;
+    }
+
+    ul.clean strong {
+      color: var(--text);
+    }
+
+    code, .mono {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 0.12em 0.35em;
+      border-radius: 6px;
+      border: 1px solid var(--bg-card-border);
+    }
+
+    .diagram-wrap {
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--bg-card-border);
+      background: rgba(0, 0, 0, 0.25);
+      overflow-x: auto;
+    }
+
+    .diagram-wrap svg {
+      display: block;
+      min-width: 520px;
+      max-width: 100%;
+      margin-inline: auto;
+    }
+
+    .screenshot-slot {
+      aspect-ratio: 16 / 10;
+      border-radius: 10px;
+      border: 2px dashed rgba(45, 212, 191, 0.35);
+      background: linear-gradient(145deg, rgba(45, 212, 191, 0.06), rgba(0, 0, 0, 0.2));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .screenshot-slot span {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      max-width: 18ch;
+    }
+
+    .team-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    @media (min-width: 40rem) {
+      .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .team-card {
+      text-align: center;
+      padding: 1.5rem 1rem;
+    }
+
+    .avatar {
+      width: 4rem;
+      height: 4rem;
+      border-radius: 50%;
+      margin: 0 auto 0.75rem;
+      background: var(--accent-dim);
+      border: 2px dashed rgba(45, 212, 191, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .team-role {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    footer.site-footer {
+      border-top: 1px solid var(--bg-card-border);
+      padding: 2rem 0 3rem;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    footer.site-footer .wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <p class="brand">Dark <span>Factory</span></p>
+      <nav class="site-nav" aria-label="Page sections">
+        <ul>
+          <li><a href="#problem">Who it’s for</a></li>
+          <li><a href="#solution">Solution</a></li>
+          <li><a href="#how-it-works">How it works</a></li>
+          <li><a href="#planning">Planning</a></li>
+          <li><a href="#shipping">Shipping product</a></li>
+          <li><a href="#demo">Demo</a></li>
+          <li><a href="#team">Team</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="top" class="hero" aria-labelledby="hero-title">
+      <div class="wrap">
+        <p class="pill">Hackathon jury presentation</p>
+        <h1 id="hero-title">Turn intent into working software—without scaling headcount first.</h1>
+        <p class="lede">
+          <strong>Dark Factory</strong> is the layer between what you write in your tracker and what lands in your codebase and live product.
+          You describe the work; the <strong>factory</strong> produces plans, implementation, and releases—then hands status cleanly back to your team.
+        </p>
+        <div class="hero-actions">
+          <!-- Replace href when you have the public repo or demo URL -->
+          <a class="btn btn-primary" href="#">View repository<span class="visually-hidden"> (URL to be added)</span></a>
+          <a class="btn btn-ghost" href="#how-it-works">How the factory runs</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="problem" class="section--alt" aria-labelledby="problem-title">
+      <div class="wrap">
+        <h2 id="problem-title">Who this is for</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Enterprises under cost pressure</h3>
+            <p style="margin: 0; color: var(--text-muted);">
+              Large engineering organisations need the same throughput with <strong>leaner teams</strong>—or the same team covering more product surface—without
+              losing traceability from request to release. The gap is not ambition; it is <strong>repeatable execution</strong> at sustainable cost.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Founders without a technical co-pilot</h3>
+            <p style="margin: 0; color: var(--text-muted);">
+              Small teams have the idea and the urgency, but not a dedicated engineer to turn specs into shippable software.
+              They need a path from <strong>plain-language intent</strong> to <strong>reviewable output</strong>—without hiring a full stack role on day one.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="solution" aria-labelledby="solution-title">
+      <div class="wrap">
+        <h2 id="solution-title">What Dark Factory is</h2>
+        <p style="max-width: 60ch; color: var(--text-muted); margin: 0 0 1.5rem;">
+          A <strong>factory</strong> that sits between your issue tracker and your product: you record <strong>what you want</strong> in the tools you already use;
+          the factory turns that into <strong>structured plans</strong>, <strong>reviewable implementation</strong>, and <strong>shipped experiences</strong>—with status flowing back to the same place your stakeholders already look.
+        </p>
+        <div class="card">
+          <h3>Three outcomes, one factory</h3>
+          <ul class="clean">
+            <li><strong>Execution lane:</strong> from a ticket or task to <strong>review-ready change</strong> in your repository—without manual glue for every issue.</li>
+            <li><strong>Planning lane:</strong> from rough requirements to a <strong>validated backlog structure</strong> you can approve before anything is created in bulk.</li>
+            <li><strong>Product lane:</strong> from “ship this experience” to a <strong>live customer-facing build</strong>—the factory handles the mechanical release path.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="section--alt" aria-labelledby="how-title">
+      <div class="wrap">
+        <h2 id="how-title">How it works: the factory in the middle</h2>
+        <p style="color: var(--text-muted); margin: 0 0 1rem; max-width: 65ch;">
+          You start from the same <strong>ticket or brief</strong> your organisation already uses. The <strong>factory</strong> is the single place where intent becomes
+          plans, code, and releases—so we do not walk the jury through our internal build steps or toolchain on this slide.
+          What matters on stage is the <strong>contract</strong>: clear inputs, reviewable outputs, and a closed loop back to stakeholders.
+        </p>
+        <ul class="clean" style="margin-bottom: 1.5rem;">
+          <li><strong>Transparency where it counts:</strong> every run leaves <strong>artefacts your team can inspect</strong>—not a black-box chat log.</li>
+          <li><strong>Two speeds:</strong> <strong>implementation</strong> when you want code in flight, or <strong>answer-only</strong> when you need a crisp reply without touching the product surface.</li>
+          <li><strong>Closure:</strong> when you accept the change, the tracker reflects <strong>Done</strong>—the loop completes without extra ceremony.</li>
+        </ul>
+
+        <div class="diagram-wrap" role="img" aria-labelledby="svg-flow-title svg-flow-desc">
+          <p id="svg-flow-title" class="visually-hidden">Flow from tracker through Dark Factory to deliverables and back</p>
+          <p id="svg-flow-desc" class="visually-hidden">
+            Your tracker sends a request into Dark Factory. The factory produces reviewable deliverables in your repository and product.
+            Status and links return to the tracker when work completes or when you merge.
+          </p>
+          <svg viewBox="0 0 560 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="nodeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#1e293b"/>
+                <stop offset="100%" style="stop-color:#0f172a"/>
+              </linearGradient>
+              <linearGradient id="factoryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#134e4a"/>
+                <stop offset="100%" style="stop-color:#0f172a"/>
+              </linearGradient>
+              <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                <path d="M0,0 L8,4 L0,8 Z" fill="#5eead4"/>
+              </marker>
+            </defs>
+            <g font-family="system-ui,Segoe UI,sans-serif" font-size="11" fill="#e8edf4">
+              <rect x="8" y="28" width="96" height="64" rx="10" fill="url(#nodeGrad)" stroke="#2dd4bf" stroke-opacity="0.35"/>
+              <text x="56" y="54" text-anchor="middle" font-weight="700">Tracker</text>
+              <text x="56" y="72" text-anchor="middle" fill="#8b9bb0" font-size="10">Request</text>
+
+              <line x1="104" y1="60" x2="124" y2="60" stroke="#2dd4bf" stroke-width="2" marker-end="url(#arrow)"/>
+
+              <rect x="124" y="22" width="200" height="76" rx="12" fill="url(#factoryGrad)" stroke="#2dd4bf" stroke-opacity="0.55"/>
+              <text x="224" y="48" text-anchor="middle" font-weight="700" font-size="12">Dark Factory</text>
+              <text x="224" y="66" text-anchor="middle" fill="#8b9bb0" font-size="10">Planning · build · release</text>
+              <text x="224" y="84" text-anchor="middle" fill="#94a3b8" font-size="9">(internal steps intentionally abstracted)</text>
+
+              <line x1="324" y1="60" x2="344" y2="60" stroke="#2dd4bf" stroke-width="2" marker-end="url(#arrow)"/>
+
+              <rect x="344" y="28" width="108" height="64" rx="10" fill="url(#nodeGrad)" stroke="#2dd4bf" stroke-opacity="0.35"/>
+              <text x="398" y="52" text-anchor="middle" font-weight="700">Deliverables</text>
+              <text x="398" y="70" text-anchor="middle" fill="#8b9bb0" font-size="10">Code &amp; product</text>
+              <text x="398" y="84" text-anchor="middle" fill="#8b9bb0" font-size="9">ready for review</text>
+
+              <line x1="452" y1="60" x2="472" y2="60" stroke="#2dd4bf" stroke-width="2" marker-end="url(#arrow)"/>
+
+              <rect x="472" y="28" width="88" height="64" rx="10" fill="url(#nodeGrad)" stroke="#2dd4bf" stroke-opacity="0.35"/>
+              <text x="516" y="54" text-anchor="middle" font-weight="700">Tracker</text>
+              <text x="516" y="72" text-anchor="middle" fill="#8b9bb0" font-size="10">Status back</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section id="planning" aria-labelledby="planning-title">
+      <div class="wrap">
+        <h2 id="planning-title">Planning lane: from messy requirements to an approved structure</h2>
+        <p style="color: var(--text-muted); margin: 0 0 1rem; max-width: 65ch;">
+          The factory ingests what is already written on the issue—notes, acceptance hints, scope—and produces a <strong>structured plan</strong> your leads can inspect.
+          Nothing bulk-writes to your tracker until you are comfortable: you get a <strong>dry run</strong>, then an explicit <strong>approval gate</strong> before creation.
+        </p>
+        <div class="card">
+          <ol class="clean" style="padding-left: 1.25rem;">
+            <li>Capture requirements from the ticket in one place.</li>
+            <li>The factory proposes epics, tasks, and subtasks in a <strong>validated</strong> format.</li>
+            <li>Review the preview; approve when it matches your intent.</li>
+            <li>Apply once—<strong>re-runs stay safe</strong> so you do not spam duplicate work items.</li>
+            <li>Stakeholders see a concise summary on the same issue they started from.</li>
+          </ol>
+          <p style="margin: 1rem 0 0; color: var(--text-muted); font-size: 0.9375rem;">
+            Under the hood the factory enforces <strong>schema checks</strong> and <strong>idempotent apply</strong>; the jury story is <strong>governance and cost control</strong>, not our file layout.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="shipping" aria-labelledby="shipping-title">
+      <div class="wrap">
+        <h2 id="shipping-title">Shipping lane: customer-facing product without a release playbook debate</h2>
+        <p style="color: var(--text-muted); margin: 0 0 1rem; max-width: 65ch;">
+          When the user-facing experience is ready, the <strong>factory</strong> runs the <strong>release path</strong>—producing a production-ready build and publishing it to
+          <strong>managed hosting</strong> your team already trusts. The trigger can be the same tracker button your PM uses for scope, so “ship it” is not a separate ritual.
+        </p>
+        <p style="margin: 0; color: var(--text-muted); font-size: 0.9375rem;">
+          We deliberately do <strong>not</strong> detail our compile, bundle, or CI graph here: for the jury, the punch line is <strong>repeatable delivery</strong> from approved mainline to live URL—with confirmation back on the ticket.
+        </p>
+      </div>
+    </section>
+
+    <section id="trust" class="section--alt" aria-labelledby="trust-title">
+      <div class="wrap">
+        <h2 id="trust-title">Why this is credible</h2>
+        <div class="grid-2">
+          <ul class="clean">
+            <li><strong>Continuity</strong> across factory runs so large items do not reset context every night.</li>
+            <li><strong>Validated plans</strong> before anything bulk-lands in your tracker.</li>
+            <li><strong>Explicit approval</strong> for high-impact actions—not silent autopilot.</li>
+          </ul>
+          <ul class="clean">
+            <li><strong>Implementation vs answer</strong> modes so “just explain this” never accidentally ships code.</li>
+            <li><strong>Merge closes the loop</strong>—status returns to Done without manual ticket hygiene.</li>
+            <li><strong>No credentials on slides</strong>—access stays in your secure automation layer.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="scope" aria-labelledby="scope-title">
+      <div class="wrap">
+        <h2 id="scope-title">What we did not claim</h2>
+        <p style="margin: 0; color: var(--text-muted); max-width: 65ch;">
+          Dark Factory is <strong>execution leverage</strong>, not a substitute for judgment: architecture, security sign-off, and roadmap calls stay human-owned.
+          The factory removes repetitive translation from intent to artefact—especially valuable when <strong>headcount is tight</strong> or <strong>technical depth is missing</strong> on the founding team.
+        </p>
+      </div>
+    </section>
+
+    <section id="demo" aria-labelledby="demo-title">
+      <div class="wrap">
+        <h2 id="demo-title">Demo &amp; proof</h2>
+        <p style="color: var(--text-muted); margin: 0 0 1.25rem;">
+          Replace the placeholders below with screenshots (tracker request, factory output or progress, reviewable deliverable or live product).
+        </p>
+        <div class="grid-3">
+          <figure class="card" style="margin: 0; padding: 0.75rem;">
+            <div class="screenshot-slot" role="img" aria-label="Placeholder for screenshot 1: tracker or request">
+              <span>Screenshot 1</span>
+              <span>Request in tracker</span>
+            </div>
+            <figcaption style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.65rem; padding: 0 0.25rem;">
+              <!-- Swap img in here: <img src="..." alt="..." width="..." height="..." loading="lazy"> -->
+            </figcaption>
+          </figure>
+          <figure class="card" style="margin: 0; padding: 0.75rem;">
+            <div class="screenshot-slot" role="img" aria-label="Placeholder for screenshot 2: factory progress or output">
+              <span>Screenshot 2</span>
+              <span>Factory in action</span>
+            </div>
+            <figcaption style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.65rem; padding: 0 0.25rem;"></figcaption>
+          </figure>
+          <figure class="card" style="margin: 0; padding: 0.75rem;">
+            <div class="screenshot-slot" role="img" aria-label="Placeholder for screenshot 3: review or live product">
+              <span>Screenshot 3</span>
+              <span>Review or live product</span>
+            </div>
+            <figcaption style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.65rem; padding: 0 0.25rem;"></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="team" aria-labelledby="team-title">
+      <div class="wrap">
+        <h2 id="team-title">Team</h2>
+        <p style="color: var(--text-muted); margin: 0 0 1.25rem;">
+          <!-- Replace names and roles when ready -->
+        </p>
+        <div class="team-grid">
+          <div class="card team-card">
+            <div class="avatar" aria-hidden="true">TBD</div>
+            <h3 style="margin-bottom: 0.25rem;">Team member 1</h3>
+            <p class="team-role">Role (TBD)</p>
+          </div>
+          <div class="card team-card">
+            <div class="avatar" aria-hidden="true">TBD</div>
+            <h3 style="margin-bottom: 0.25rem;">Team member 2</h3>
+            <p class="team-role">Role (TBD)</p>
+          </div>
+          <div class="card team-card">
+            <div class="avatar" aria-hidden="true">TBD</div>
+            <h3 style="margin-bottom: 0.25rem;">Team member 3</h3>
+            <p class="team-role">Role (TBD)</p>
+          </div>
+        </div>
+        <div class="card" style="margin-top: 1.5rem;">
+          <h3 style="margin-top: 0;">Ask for the jury</h3>
+          <p style="margin: 0; color: var(--text-muted);">
+            We would love feedback on product positioning, safety controls, and what you would need to run something like this
+            inside a regulated or high-stakes engineering org. Thank you for your time and attention.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p style="margin: 0;">Dark Factory — hackathon presentation. Single static file; open locally or host as you prefer.</p>
+      <p style="margin: 0;"><a href="#top">Back to top</a></p>
+    </div>
+  </footer>
+</body>
+</html>
