@@ -1,0 +1,69 @@
+---
+import type { Painter } from "../data/painters";
+import { lifespan, bioParagraphs } from "../data/painters";
+
+interface Props {
+  painter: Painter;
+  index: number;
+}
+const { painter, index } = Astro.props;
+const { meta, bio } = painter;
+const span = lifespan(meta);
+const paragraphs = bioParagraphs(bio, meta.name_lv);
+const sectionId = `p-${index + 1}`;
+---
+
+<section
+  class="painter"
+  id={sectionId}
+  data-painter-index={index}
+  aria-labelledby={`${sectionId}-name`}
+>
+  <div
+    class="hero"
+    style={meta.profile_image_url ? `--hero-image: url('${meta.profile_image_url}')` : ""}
+  >
+    <div class="hero-overlay"></div>
+    <div class="hero-frame reveal" data-reveal>
+      <div class="hero-num">{String(index + 1).padStart(2, "0")}</div>
+      <h2 id={`${sectionId}-name`} class="painter-name" data-name-en={meta.name_en}>
+        {meta.name_lv}
+      </h2>
+      {span && <p class="painter-lifespan">{span}</p>}
+    </div>
+  </div>
+
+  <div class="prose-block">
+    <div class="prose reveal" data-reveal>
+      {paragraphs.map((para) => <p>{para}</p>)}
+
+      {meta.article_url && (
+        <p class="read-link">
+          <a href={meta.article_url} target="_blank" rel="noopener noreferrer">
+            Read on Encyclopaedia Latvija →
+          </a>
+        </p>
+      )}
+    </div>
+  </div>
+
+  {meta.gallery_urls.length > 0 && (
+    <div class="gallery-strip reveal" data-reveal aria-label={`Gallery: ${meta.name_lv}`}>
+      <ul class="gallery-list">
+        {meta.gallery_urls.slice(0, 6).map((url, i) => (
+          <li>
+            <button
+              type="button"
+              class="thumb"
+              data-lightbox-src={url}
+              data-lightbox-alt={`${meta.name_lv} — work ${i + 1}`}
+              aria-label={`Open larger image ${i + 1} of ${meta.name_lv}'s work`}
+            >
+              <img src={url} alt={`${meta.name_lv} — work ${i + 1}`} loading="lazy" />
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+</section>
