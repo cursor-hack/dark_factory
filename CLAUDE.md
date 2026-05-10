@@ -2,80 +2,40 @@ IMPORTANT: NEVER expose, print, or commit secrets. Treat Jira, GitHub, and Claud
 
 # The Dark Factory Automation Agent
 
-You are running inside `NurMind-com/The_Dark_Factory`, usually from GitHub Actions after a Jira ticket is created, updated, or manually triggered.
+## Where you are
 
-Your purpose is to turn a Jira ticket into reviewable repository work or a clean Jira-facing answer.
+You are running inside the GitHub repository **`cursor-hack/dark_factory`**, almost always non-interactively from a GitHub Actions runner. There is no human at the keyboard. Your output reaches a human via two side channels: a Jira comment posted by the workflow, and (in PR mode) a pull request opened by the workflow.
 
-You are invoked by the **dispatch flow**: Jira's manual button sends a `repository_dispatch` of type `jira_manual_button` carrying the issue key. The workflow `.github/workflows/jira-dispatch.yml` fetches the ticket, sets up `spec/<TICKET-ID>/`, and runs you with the right context. Session continuity is preserved between runs via `actions/cache` of `~/.claude/projects/` and a `state.json` checked into the ticket folder.
+## What this repo is for
 
-When a `tdf/<key>` PR you opened is merged, `.github/workflows/jira-pr-merged.yml` finalizes things (transitions Jira to Done, deletes the head branch). Do not try to do that yourself.
+Dark Factory turns Jira tickets into reviewable repository work or clean Jira-facing answers. A Jira automation rule fires a `repository_dispatch`, GitHub Actions checks out the repo, prepares a per-ticket scratch folder under `spec/<TICKET-ID>/`, and runs you with the right context. Session continuity across runs is preserved via `actions/cache` of `~/.claude/projects/` and a `state.json` checked into the ticket folder.
 
-## Product web deploy (separate from ticket coding)
+The same repo also ships **client product web apps** (one site per repo) under `clients/<client>/<delivery>/web/`, deployed to GitHub Pages by a separate `jira_deploy_product` dispatch. See `docs/product-deploy.md`.
 
-Shippable **websites / SPAs** for a client delivery should live under **`clients/<client>/<delivery>/web/`** with **`npm run build`** writing static files to **`dist/`**. A Jira automation rule can call GitHub `repository_dispatch` with **`event_type`: `jira_deploy_product`** and **`client_payload`**: `issue_key`, `client`, `delivery` (lowercase slugs matching the path). The workflow **always builds from `main`** and publishes **`dist/`** to **GitHub Pages** (one site per repo). Merge the product PR before asking someone to click Deploy. Details: [`docs/product-deploy.md`](docs/product-deploy.md). This is separate from **local Supabase + ngrok** for `clients/**/backend/**` (see `.github/workflows/deploy-on-merge.yml`).
+## What you do
 
-## Agent skills (product web and landing pages)
+Each invocation is task-scoped: the workflow gives you the goal, the input/output file paths, and the kind of run via the prompt and environment. Stay inside that scope. Leave PR creation, branch pushes, Jira commenting, and ticket transitions to the workflow.
 
-When implementing or changing **`clients/**/web/`**, or building **landing / marketing** frontends for this repository, read and apply:
+## Skills
 
-- [`.claude/skills/dark-factory-product-web/SKILL.md`](.claude/skills/dark-factory-product-web/SKILL.md) — repo layout, `npm run build` → **`dist/`**, deploy expectations.
-- [`.claude/skills/landing-page-frontend/SKILL.md`](.claude/skills/landing-page-frontend/SKILL.md) — conversion-oriented structure, performance, accessibility, SEO/social, minimal JS for static pages.
+This repo ships project-level skills under `.claude/skills/`. Claude Code auto-loads them at startup and **auto-invokes** them when their description matches the work in front of you — you do not need to enumerate or explicitly call them. When a task touches a skill's domain, its `SKILL.md` content is brought into your context as binding repository convention, not optional advice.
 
-Your job on each run:
+If a skill seems relevant but doesn't fire, you can still read its `SKILL.md` directly with the `Read` tool.
 
-1. Read the generated ticket artefacts, especially the spec file referenced by `SPEC_FILE`.
-2. Write or update the implementation plan at the exact path in `PLAN_FILE`.
-3. Implement only the requested ticket work on the current branch.
-4. Write the Jira-facing summary or answer to `RESPONSE_FILE`.
-5. Keep generated ticket artefacts organised under `spec/<TICKET-ID>/` and avoid cluttering the repository root.
-6. Leave pull request creation, branch pushes, and Jira commenting to the workflow.
+## Conventions
 
-## Dispatch Flow Context
+- **Branch:** the dispatch flow puts you on the work branch. Do not switch branches.
+- **Scratch:** keep generated artefacts under `spec/<TICKET-ID>/`; don't clutter the repo root.
+- **Secrets:** never echo, log, or commit them. Inputs from `secrets.*` arrive via env vars.
+- **Transient files:** do not commit Claude execution byproducts such as `output.txt`.
+- **Real over assumed:** prefer reading current repo state over assuming. Validate scripts you change with a syntax check when one is cheap.
 
-When the dispatch flow runs, the workflow exports these env vars before invoking you:
+## Model use
 
-- `ISSUE_KEY`, `ISSUE_TITLE`, `JIRA_ISSUE_URL`
-- `KIND`: `pr` (expects code changes plus a PR) or `answer` (expects only ticket-folder updates and a Jira-facing response)
-- `IS_NEW`: `true` if this is the first run for the ticket, `false` if continuing
-- `LAST_SESSION_ID`: prior Claude session id, when known
-- `TICKET_FOLDER` (e.g. `spec/TDS-7`), `STATE_FILE`, `TRANSCRIPT_FILE`, `SPEC_FILE`, `PLAN_FILE`, `RESPONSE_FILE`, `RUN_DIR`
+The workflow starts you on Opus with high effort. Reserve that capability for architecture, ambiguous requirements, security-sensitive logic, and final review. Use cheaper models when the runtime exposes a safe way and the subtask is mechanical: file/symbol search, log summarization, formatting checks, routine markdown drafting, narrow edits.
 
-`KIND` is determined from Jira:
+## Quality bar
 
-- Label `claude:answer` → `answer` (highest priority).
-- Label `claude:pr` → `pr`.
-- Issue type `Question` → `answer`.
-- Default → `pr`.
-
-If `KIND=answer`, do not edit any file outside `TICKET_FOLDER`. Write the full answer to `RESPONSE_FILE`.
-
-If `KIND=pr`, make minimal correct repository changes, update `PLAN_FILE`, and write a short Jira-facing summary to `RESPONSE_FILE`.
-
-## Operating Context
-
-- The branch name normally starts with a Jira key, often lowercased by Jira automation. The dispatch flow uses `tdf/<ticket-id-lowercase>` for PR mode.
-- The workflow normalises Jira keys before generating ticket artefact paths.
-- The current branch is the work branch. Do not switch branches.
-- Do not merge pull requests, close tickets, or edit Jira directly unless the ticket explicitly asks for that behaviour and the workflow provides the required tools.
-- Prefer small, direct changes that match the ticket acceptance criteria.
-
-## Model Use
-
-The workflow starts you on Opus with high effort for planning and implementation quality.
-
-Use less capable models proactively when the runtime exposes a safe way to do so and the subtask does not require Opus-level reasoning. Good candidates for cheaper models are:
-
-- searching for files or symbols
-- summarizing long logs
-- checking formatting or simple syntax issues
-- drafting routine markdown
-- performing narrow mechanical edits
-
-Reserve Opus/high-effort reasoning for architecture, workflow design, security-sensitive logic, ambiguous requirements, and final review before handing work back to the workflow.
-
-## Quality Bar
-
-- Prefer real repository state over assumptions.
-- Validate changed scripts with syntax checks when possible.
-- If a web page or HTML artifact is created, ensure it can render in a browser and mention any unverified visual risk in the plan.
-- Do not commit transient Claude execution files such as `output.txt`.
+- Match the ticket acceptance criteria; prefer small, direct changes.
+- If you produce a web page or HTML artefact and have not rendered it in a browser, say so explicitly in the plan or PR notes.
+- Surface unverified risk rather than hiding it.
