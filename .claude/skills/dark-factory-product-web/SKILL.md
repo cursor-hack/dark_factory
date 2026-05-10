@@ -1,11 +1,12 @@
 ---
 name: dark-factory-product-web
 description: >-
-  Enforces the Dark Factory product web layout and deploy contract under
-  clients/<client>/<delivery>/web/. Use when creating or editing client-facing
-  websites, SPAs, static marketing sites, npm build scripts, or GitHub Pages
-  product deploy for this repository.
-disable-model-invocation: true
+  Repo contract for product web apps under clients/<client>/<delivery>/web/.
+  Auto-invoke whenever a task creates, edits, builds, or deploys files inside
+  clients/**/web/, touches an npm build script under that path, or mentions
+  GitHub Pages product deploy in this repository. Covers required folder
+  structure, npm run build → dist/ contract, and the jira_deploy_product
+  dispatch flow.
 ---
 
 # Dark Factory product web delivery

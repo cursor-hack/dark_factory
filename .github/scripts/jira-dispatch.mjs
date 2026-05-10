@@ -768,6 +768,8 @@ function buildPrompt({ key, summary, ticketFolder, kind, isNew, specFile, planFi
     "",
     "Read `CLAUDE.md` for repository conventions before touching files.",
     "",
+    "Project-level skills under `.claude/skills/` auto-load and auto-invoke when their description matches the work; let them. If you recognise that a skill applies and it has not fired, read its `SKILL.md` directly.",
+    "",
     `Ticket folder: \`${ticketFolder}\`.`,
     `- \`${specFile}\`: a fresh snapshot of the Jira ticket and its comments. Read it. Do not edit it.`,
     `- \`${planFile}\`: implementation plan. You own this file. Update it as you go.`,

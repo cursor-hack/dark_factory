@@ -1,12 +1,12 @@
 ---
 name: landing-page-frontend
 description: >-
-  Builds and refines marketing landing pages and small static sites with clear
-  hierarchy, performance, accessibility, responsive layout, and SEO/social
-  metadata. Use when creating or editing landing pages, marketing heroes,
-  brochure sites, lead-capture pages, or static frontends with minimal runtime
-  JavaScript.
-disable-model-invocation: true
+  Quality bar for marketing landing pages and small static sites. Auto-invoke
+  whenever a task creates or edits a landing page, marketing hero, brochure
+  site, lead-capture page, or a static frontend with minimal runtime
+  JavaScript. Covers information architecture, semantic HTML, Core Web Vitals
+  (LCP/CLS/INP), accessibility baseline, SEO and Open Graph, and content
+  privacy expectations.
 ---
 
 # Landing page and marketing frontend
